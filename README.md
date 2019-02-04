@@ -5,4 +5,7 @@
 (Are Your Prepared?)  
 Technical Production at NYC College of Technology. Spring 19.
 
+Resources:
+- Coding Train [video](https://www.youtube.com/playlist?list=PLRqwX-V7Uu6bw0bVn4M63p8TMJf3OhGy8) !
+
 Click here for the [Wiki](https://github.com/entertainmenttechnology/Berkoy-ENT3320-Spring2019/wiki) !
