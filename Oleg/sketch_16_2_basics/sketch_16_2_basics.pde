@@ -13,9 +13,9 @@ video.read(); //<-- read the current video frame
 
 void draw() { //<--fucntion to draw on a canvas
 background(255); //<--create a white background 
-tint(mouseX, mouseY, 255);
+tint(mouseX, mouseY, 255); // Changes video feed color based on mouse position
 translate(width/2, height/2);
-imageMode(CENTER);
+imageMode(CENTER); // Centers video in middle of screen
 rotate(PI/4);
 image(video, 0, 0, mouseX, mouseY);
 }
