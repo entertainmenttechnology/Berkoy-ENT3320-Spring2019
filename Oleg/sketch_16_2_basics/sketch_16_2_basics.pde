@@ -23,7 +23,7 @@ image(video, 0, 0, mouseX, mouseY); // <-- show image of a video on canvas with 
 tint(mouseX, mouseY, 255); // Changes video feed color based on mouse position
 translate(width/2, height/2);
 imageMode(CENTER); // Centers video in middle of screen
-rotate(PI/4);
-image(video, 0, 0, mouseX, mouseY);
->>>>>>> 64de371c850833394ece552fc022eaeecab546f1
+rotate(PI/4); // <-- rotate image by 45 degrees
+image(video, 0, 0, mouseX, mouseY); //<-- create video image on canvas at point 0,0 with width and height mouseX and mouseY 
+
 }
