@@ -16,6 +16,7 @@ void setup() { //<-- create a function setup to run it once
   for(int i = 0; i < listOfCameras.length; i++){//<--for loop to print the list of cameras
     println(listOfCameras[i]);
   }
+
   video.start(); //<-- starting the capturing of frames from available camera
   // Create an empty image the same size as the video
   prevFrame = createImage(video.width, video.height, RGB); //<-- create a PImage and assign to prevFrame variable as a format RGB
@@ -27,6 +28,7 @@ void captureEvent(Capture video) {
   // Save previous frame for motion detection!!
   prevFrame.copy(video, 0, 0, video.width, video.height, 0, 0, video.width,video.height);
   prevFrame.updatePixels();
+   //println(prevFrame.pixels);
   //reference: https://processing.org/reference/updatePixels_.html
   video.read(); // <-- reads the current video frame
 }
@@ -35,7 +37,8 @@ void draw() {
   background(0); //<-- update background with a black color
   // If you want to display the videoY
   // You don't need to display it to analyze it!
-  image(video, 0, 0); //<--add image of video frame to canvas 
+  imageMode(CENTER);
+  image(video, width/2, height/2); //<--add image of video frame to canvas at point 0, 0. 
   loadPixels(); //<-- function to load snapshot of image into pixels[].
   //reference: https://processing.org/reference/loadPixels_.html
   video.loadPixels();//<-- same as before, it is just this time to load into video.
