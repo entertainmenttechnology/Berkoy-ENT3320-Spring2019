@@ -1,6 +1,6 @@
 import processing.video.*; //<-- import library
 // Variable for capture device
-Capture video; // <--create a Capture object named video
+Capture video; // <--create a Capture variable named video
 // Previous Frame
 PImage prevFrame; // <-- create a PImage named prevFrame
 //reference: https://processing.org/reference/PImage.html

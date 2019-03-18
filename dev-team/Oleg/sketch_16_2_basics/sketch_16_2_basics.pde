@@ -13,13 +13,13 @@ video.read(); //<-- read the current video frame
 
 void draw() { //<--fucntion to draw on a canvas
 background(255); //<--create a white background 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 tint(mouseX, mouseY, 255);//<-- function to use mouseX and mouseY values to change rgb values of tint
 translate(width/2, height/2); //<-- function to replace starting points of image from 0,0 to width/2, height/2.
 imageMode(CENTER);//<-- Use CENTER as a manipulating point for an image
 rotate(mouseX); //<-- Rotate image to 45 degrees
 image(video, 0, 0, mouseX, mouseY); // <-- show image of a video on canvas with starting points 0, 0, and width and height of an image comparable to MouseX and MouseY
-=======
+//=======
 tint(mouseX, mouseY, 255); // Changes video feed color based on mouse position
 translate(width/2, height/2);
 imageMode(CENTER); // Centers video in middle of screen
