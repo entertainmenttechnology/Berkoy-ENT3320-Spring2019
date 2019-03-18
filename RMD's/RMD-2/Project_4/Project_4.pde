@@ -1,3 +1,12 @@
+/*
+  Project - 4 : A wireless tape measure
+  "Making Things See", page 69
+  
+  ==============================
+  
+  Author: Greg Borenstein
+*/
+
 //Import the library
 import SimpleOpenNI.*;
 //Create an object called Kinect

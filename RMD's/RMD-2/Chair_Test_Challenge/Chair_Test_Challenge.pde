@@ -1,3 +1,12 @@
+/*
+  Sitting Chair Challenge
+  "Making Things See", page 61
+  
+  ==============================
+  
+  Author: Greg Borenstein
+*/
+
 //importing library
 import SimpleOpenNI.*;
 

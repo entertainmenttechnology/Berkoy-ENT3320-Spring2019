@@ -1,3 +1,12 @@
+/*
+  Project - 2 - Your First Kinect Program
+  "Making Things See", page 53
+  
+  ==============================
+  
+  Author: Greg Borenstein
+*/
+
 //Import the library that gives the ability to use the Kinect Sensor
 import SimpleOpenNI.*;
 //Create an object called Kinect

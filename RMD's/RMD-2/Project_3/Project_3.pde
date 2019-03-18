@@ -1,3 +1,12 @@
+/*
+  Project - 3 : Looking at a Pixel
+  "Making Things See", page 61
+  
+  ==============================
+  
+  Author: Greg Borenstein
+*/
+
 //Import the library to use simpleopenNi
 import SimpleOpenNI.*;
 //Create an Object called kinect

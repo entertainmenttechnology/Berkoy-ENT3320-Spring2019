@@ -1,3 +1,12 @@
+/*
+  Center of Mass
+  "Making Things See", page 260
+  
+  ==============================
+  
+  Author: Greg Borenstein
+*/
+
 //Import the library
 import SimpleOpenNI.*;
 //Create an object called Kinect
