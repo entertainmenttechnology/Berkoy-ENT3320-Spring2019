@@ -6,6 +6,9 @@
   
   Author: Johnny, Daniel, Anthony, Oleg
   
+  CHANGE LOCATION OF FOR LOOP TO ONLY LOCATE THE RANDOM PERSON WHO IS SELECTED
+  CHA 3 AND 4 NEEDED
+  
 */
 
 //importing library
@@ -22,6 +25,8 @@ float RW = 140; // Setting the Rectangle width
 float RH = 130; // Setting the Rectangle Height
 float distance;
 float boundaryX;
+int state = 0; 
+int rand = -1;
 
 //run setup
 void setup() {
@@ -92,6 +97,15 @@ void draw() {
          textAlign(CENTER);
          textSize(40);
          text("On Stage", position.x, position.y);
+         state = 2;
+         
+         if (state == 2){
+          textAlign(CENTER);
+          textSize(40);
+          text("Sit on chair", position.x, position.y);
+          delay (5000);
+          state ++;
+         }
          
        }
        else if(distance < 175 && boundaryX > 4 && boundaryX < 20){
@@ -100,49 +114,100 @@ void draw() {
           textSize(40);
           text(userId, position.x, position.y);
           
-         
-          
-          if(mousePressed == true){
-            mouseClicked(userList, position);
+          if(userId >= 4){
+            state = 0;
+            rand = -1;
+            println(rand + " " + state);
           }
           
-       }
+          if(userId <= 3 && userId > 0 && state == 0){
+            delay(3000);
+            rand = int(random(userId));
+            state = 1;
+            println(rand +" " + state);
+            
+          }
+          
+          
+          
+          if (rand == 0 && state == 1){
+            int userIdChosen = rand + 1;
+            PVector person1 = new PVector();
+            kinect.getCoM(userIdChosen, person1); 
+            kinect.convertRealWorldToProjective(person1, person1);             noFill();
+             strokeWeight(4);
+             stroke(0,255,0);
+             rectMode(CENTER);
+             rect(person1.x, person1.y, 100,200);
+             println (rand + " " + state);
+             text("Come on to stage", person1.x, person1.y + 100);
+          }
+          
+            else if (rand == 1 && state == 1){
+            int userIdChosen = rand + 1;
+            PVector person1 = new PVector();
+            kinect.getCoM(userIdChosen, person1); 
+            kinect.convertRealWorldToProjective(person1, person1);        
+            noFill();
+            strokeWeight(4);
+            stroke(0,255,0);
+            rectMode(CENTER);
+            rect(person1.x, person1.y, 100,200);
+            println (rand + " " + state);
+            text("Come on to stage", person1.x, person1.y + 100);
+          }
+          
+          else if (rand == 2 && state == 1){
+            int userIdChosen = rand + 1;
+            PVector person1 = new PVector();
+            kinect.getCoM(userIdChosen, person1); 
+            kinect.convertRealWorldToProjective(person1, person1);  
+             noFill();
+             strokeWeight(4);
+             stroke(0,255,0);
+             rectMode(CENTER);
+             rect(person1.x, person1.y, 100,200);
+             println (rand + " " + state);
+             text("Come on to stage", person1.x, person1.y + 100);
+          }
+
+          }
+          
+          
+       
        else{
-          /*
+         /* 
           textAlign(CENTER);
           textSize(40);
           text("Waiting For Users", width/2, height/2);
           */
        }
+       
+   }
      
      
      
    }
 
-}
-void randomBox(IntVector id)
-{
-  
-  
-}
 
-void mouseClicked(IntVector userList, PVector position){
+//void chooseRand(IntVector userList, PVector position){
   
-  println("Random Box running");
-  int length = int(userList.size());
-  int []arr=new int[length];
-  for (int i = 0; i < userList.size(); i++){
-    arr[i] = userList.get(i);
-    //println(arr[i]);
-  } 
+//  println("Random Box running");
+//  int length = int(userList.size());
+//  int []arr=new int[length];
   
-  int index = int(random(arr.length));  // Same as int(random(4))
-  println("Index:");
-  println(arr[index]);
-   noFill();
-   strokeWeight(4);
-   stroke(0,255,0);
-   rectMode(CENTER);
-   rect(position.x, position.y, 100,200);
-  //println(arr);
-}
+//  for (int i = 0; i < userList.size(); i++){
+//    arr[i] = userList.get(i);
+//    //println(arr[i]);
+//  }
+  
+//  int index = int(random(arr.length));  // Same as int(random(4))
+//  println("Index:  " + arr[index]);
+//   noFill();
+//   strokeWeight(4);
+//   stroke(0,255,0);
+//   rectMode(CENTER);
+//   rect(position.x, position.y, 100,200);
+// // println(arr);
+
+//}
