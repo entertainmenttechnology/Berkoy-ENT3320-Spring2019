@@ -5,6 +5,8 @@
  Press key to test.
  Install voices from https://www.assistiveware.com/products/infovox-ivox . 
  If no voices installed, use Apple voice "fred"
+ 
+ Finalist voices / speeds: Harry (200), BadGuy (200), Rhona (175)
  ////////////////////////////////////////////////////////
  */
 
