@@ -10,22 +10,24 @@ MULTI-DISPLAY TEST WITH ASSETS
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 //display dimensions
 int display1_width = 1920;
 int display2_width = 1920;
 int display_height = 1080; //display heights must match
 int display_width = display1_width + display2_width; //total width
 
-//sample image files
+//create objects for sample assets
 PImage face1, face2, face3;
 PImage back1, back2, back3, back4, back5;
 
-//display stuff
-PImage display1;  //what's on display 1
-PImage display2;  //what's on display 2 
+
+//image display
+PImage display1_image;  //image on display 1
+PImage display2_image;  //image on display 2 
 //to display or not to display
-boolean display1_image=false;
-boolean display2_image=false;
+boolean display1_image_visible=false;
+boolean display2_image_visible=false;
 
 
 void setup() {
@@ -38,20 +40,20 @@ void setup() {
   back1 = loadImage("data/sample_assets/backgrounds/back1.jpg");
   back2 = loadImage("data/sample_assets/backgrounds/back2.jpg");
 
-  display1= back1;
-  display2= face1;
+  display1_image= back1;
+  display2_image= face1;
 }
 
 
 void draw() {
 
-  if (display1_image== true) {
+  if (display1_image_visible== true) {
     //display 1
-    image (display1, 0, 0);
+    image (display1_image, 0, 0);
   }
-  if (display2_image== true) {
+  if (display2_image_visible== true) {
     //display 2 : sample face test
-    image (display2, display1_width, 0);
+    image (display2_image, display1_width, 0);
   }
 }
 
@@ -63,13 +65,13 @@ void keyPressed() {
     clearDisplay ("display1", 0, 0, 255);
     clearDisplay ("display2", 255, 0, 0);
   } else if (key== 'w') {
-    display1_image= true;
-    display2_image= true;
-    display1= back1;
-    display2= face1;
+    display1_image_visible= true;
+    display2_image_visible= true;
+    display1_image= back1;
+    display2_image= face1;
   } else if (key== 'e') {
-    display1_image= true;
-    display1= back2;
+    display1_image_visible= true;
+    display1_image= back2;
   }
 }
 
@@ -78,10 +80,10 @@ void keyPressed() {
 void clearDisplay(String whichDisplay, int r, int g, int b) { 
   fill (r, g, b);
   if (whichDisplay== "display1") {
-    display1_image= false;
+    display1_image_visible= false;
     rect (0, 0, display1_width, display_height);
   } else if (whichDisplay== "display2") {
-    display2_image= false;
+    display2_image_visible= false;
     rect(display1_width, 0, display2_width, display_height);
   }
 }
