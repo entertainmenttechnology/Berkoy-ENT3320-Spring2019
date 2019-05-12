@@ -5,12 +5,15 @@ MULTI-DISPLAY TEST WITH ASSETS
  Triple-display output: laptop screen, monitor, projector 
  Riffing off of Alberto's sketch.
  
- NOTE: 
+ NOTES: 
  Calibrate display arrangement in system preferences. Drag output window to align.
+ Uses Minim Library for sound. Install from Processing Contributed Libraries.
+ Reference at http://code.compartmental.net/minim/ under AudioPlayer
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import processing.video.*;
+import ddf.minim.*;
 
 //display dimensions
 int display1_width = 1920;
@@ -18,13 +21,19 @@ int display2_width = 1920;
 int display_height = 1080; //display heights must match
 int display_width = display1_width + display2_width; //total width
 
+Minim minim; //Minim object
+
 //create objects for sample assets
 PImage face1, face2, face3;
 PImage back1, back2, back3, back4, back5;
 Movie video1;
 Movie video2;
 Movie video3;
+AudioPlayer sound1;
+AudioPlayer sound2;
 
+//object for current sound loaded
+AudioPlayer sound; 
 
 //what's displayed
 PImage display1_image;  //image on display 1
@@ -41,6 +50,8 @@ boolean display2_video_visible=false;
 void setup() {
   size(3840, 1080);  //enter number parameters ****************
 
+  minim = new Minim(this); //assigns new minim object
+
   //load sample images
   face1 = loadImage("data/sample_assets/faces/smiley1.png");
   face2 = loadImage("data/sample_assets/faces/smiley2.png");
@@ -50,12 +61,15 @@ void setup() {
   video1= new Movie(this, "sample_assets/videos/video1.mp4");
   video2= new Movie(this, "sample_assets/videos/video2.mov");
   video3= new Movie(this, "sample_assets/videos/video3.mp4");
+  sound1 = minim.loadFile("sample_assets/music/music1.wav");
+  sound2 = minim.loadFile("sample_assets/music/music3.wav");
 
-  //assign initial assets but do not display
+  //assign initial assets but do not display or play
   display1_image= back1;
   display2_image= face1;
   display1_video= video1;
   display2_video= video2;
+  sound= sound1;
 }
 
 
@@ -84,6 +98,23 @@ void draw() {
 }
 
 void keyPressed() {
+
+  //SAMPLE SOUNDS
+  if (key== 'y') {
+    sound.pause();
+    sound= sound1;
+    sound.rewind();
+    sound.play();
+  } 
+  if (key=='u') {
+    sound.pause();
+    sound= sound2;
+    sound.rewind();
+    sound.play();
+  } else if (key== 'i'){  //stop sound
+    sound.pause();
+  }
+  
 
   //SAMPLE IMAGES
   if (key== 'q') {
