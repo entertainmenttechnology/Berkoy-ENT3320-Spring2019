@@ -45,5 +45,6 @@ class Face {
     if (eye== "still") {
       move=0;
     }
+     rectMode(CORNER);
   }
 }
