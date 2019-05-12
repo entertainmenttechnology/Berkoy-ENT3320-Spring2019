@@ -10,6 +10,7 @@ MULTI-DISPLAY TEST WITH ASSETS
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+import processing.video.*;
 
 //display dimensions
 int display1_width = 1920;
@@ -20,14 +21,21 @@ int display_width = display1_width + display2_width; //total width
 //create objects for sample assets
 PImage face1, face2, face3;
 PImage back1, back2, back3, back4, back5;
+Movie video1;
+Movie video2;
+Movie video3;
 
 
-//image display
+//what's displayed
 PImage display1_image;  //image on display 1
 PImage display2_image;  //image on display 2 
+Movie display1_video; //video on display 1
+Movie display2_video;  //video on display 2
 //to display or not to display
 boolean display1_image_visible=false;
 boolean display2_image_visible=false;
+boolean display1_video_visible=false;
+boolean display2_video_visible=false;
 
 
 void setup() {
@@ -39,9 +47,15 @@ void setup() {
   face3 = loadImage("data/sample_assets/faces/smiley3.png");
   back1 = loadImage("data/sample_assets/backgrounds/back1.jpg");
   back2 = loadImage("data/sample_assets/backgrounds/back2.jpg");
+  video1= new Movie(this, "sample_assets/videos/video1.mp4");
+  video2= new Movie(this, "sample_assets/videos/video2.mov");
+  video3= new Movie(this, "sample_assets/videos/video3.mp4");
 
+  //assign initial assets but do not display
   display1_image= back1;
   display2_image= face1;
+  display1_video= video1;
+  display2_video= video2;
 }
 
 
@@ -55,6 +69,18 @@ void draw() {
     //display 2 : sample face test
     image (display2_image, display1_width, 0);
   }
+  if (display1_video_visible== true) {
+    if (display1_video.available()) {
+      display1_video.read();
+    }
+    image (display1_video, 0, 0);
+  }
+  if (display2_video_visible== true) {
+    if (display2_video.available()) {
+      display2_video.read();
+    }
+    image (display2_video, display1_width, 0);
+  }
 }
 
 void keyPressed() {
@@ -65,13 +91,26 @@ void keyPressed() {
     clearDisplay ("display1", 0, 0, 255);
     clearDisplay ("display2", 255, 0, 0);
   } else if (key== 'w') {
+    clearDisplay("display1", 0, 0, 0);
+    clearDisplay("display2", 255, 255, 255);
     display1_image_visible= true;
     display2_image_visible= true;
     display1_image= back1;
     display2_image= face1;
   } else if (key== 'e') {
+    clearDisplay("display1", 0, 0, 0);
     display1_image_visible= true;
     display1_image= back2;
+  } else if (key== 'r') {
+    clearDisplay("display1", 0, 0, 0);
+    display1_video_visible= true;
+    display1_video= video1;
+    video1.play();
+  } else if (key== 't') {
+    clearDisplay("display1", 0, 0, 0);
+    display1_video_visible= true;
+    display1_video= video2;
+    video2.play();
   }
 }
 
@@ -81,9 +120,11 @@ void clearDisplay(String whichDisplay, int r, int g, int b) {
   fill (r, g, b);
   if (whichDisplay== "display1") {
     display1_image_visible= false;
+    display1_video_visible= false;
     rect (0, 0, display1_width, display_height);
   } else if (whichDisplay== "display2") {
     display2_image_visible= false;
+    display2_video_visible= false;
     rect(display1_width, 0, display2_width, display_height);
   }
 }
