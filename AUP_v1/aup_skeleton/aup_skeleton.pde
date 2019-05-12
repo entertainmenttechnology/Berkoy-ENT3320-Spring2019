@@ -4,6 +4,7 @@
  
  TESTING:
  Press keys 1-3 + q-i to test (see below).
+ 'k' to display Kinect, 'l' to stop/clear.
  
  DISPLAYS:
  Triple-display output: laptop screen, monitor, projector. 
@@ -51,6 +52,8 @@ boolean silence= true;
 import SimpleOpenNI.*;
 SimpleOpenNI context;
 int userCount=0;
+boolean displayDepthImage= false;
+boolean displayCOM= false;
 
 
 //FACE
@@ -202,6 +205,7 @@ void draw() {
     }
     image (display2_video, display1_width, 0);
   }
+  //KINECT NOTE: SEE DISPLAY IN KINECT();
 }
 
 
@@ -265,6 +269,17 @@ void keyPressed() {
     sound.play();
   } else if (key== 'i') {  //stop sound
     sound.pause();
+  }
+
+  //DISPLAY KINECT
+  if (key== 'k') {
+    clearDisplay("display1", 0, 0, 0);
+    displayDepthImage= true;
+    displayCOM= true;
+  } else if (key=='l') {
+    displayDepthImage=false;
+    displayCOM= false;
+    clearDisplay("display1", 0, 0, 0);
   }
 }
 
@@ -357,7 +372,6 @@ void kinect() {
   IntVector userList= new IntVector();
   context.getUsers(userList);
 
-  //println ("number of users: "+ userCount);
 
   for (int u=0; u<userList.size(); u++) {
     int userID= userList.get(u);
@@ -365,12 +379,18 @@ void kinect() {
     context.getCoM( userID, position);
     context.convertRealWorldToProjective(position, position);
 
-    //TESTING COM FOR KINECT ON/OFF*****
-    fill(255, 0, 0);
-    textSize(40);
-    text(userID, position.x, position.y, position.z);
+    //USER IDS + COM DISPLAYED ONLY IF DEPTH IMAGE DISPLAYED
+    if (displayDepthImage== true) { 
+      if (displayCOM== true) {
+        image(context.depthImage(), 0, 0, 1920, 1080);
+        fill(255, 0, 0);
+        textSize(60);
+        text(userID, position.x * 3, position.y * 2.5, position.z);
+      }
+    }
 
-    println ("x: " + position.x + " Y  " + position.y + " z: " + position.z);
+
+    println ("user ID: " + userID + " x: " + position.x + " Y  " + position.y + " z: " + position.z);
     println ("kinect:  " + " userCount: " + userCount);
   }
 }
