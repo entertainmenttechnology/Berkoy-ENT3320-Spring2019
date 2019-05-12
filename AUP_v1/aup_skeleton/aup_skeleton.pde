@@ -283,7 +283,7 @@ void keyPressed() {
   }
 }
 
-//to clear display of image 
+//CLEAR DISPLAY
 void clearDisplay(String whichDisplay, int r, int g, int b) { 
   fill (r, g, b);
   if (whichDisplay== "display1") {
@@ -297,6 +297,7 @@ void clearDisplay(String whichDisplay, int r, int g, int b) {
   }
 }
 
+//JOKE
 void joke() {
   handle(joke, "joke", whichJoke, randomJoke);
   whichJoke= currentInput;
@@ -304,7 +305,7 @@ void joke() {
   println(text);
 }
 
-
+//JSON DATA (AQI)
 void aqi_report() {
   if (aqi >= 0 && aqi <= 50) {
     aqi_desc= "good. . . Air quality is satisfactory and poses little or no health risk. . . Ventilating your home is recommended. . . Recommendations. . . Enjoy your usual outdoor activities. We recommend opening your windows and ventilating your home to bring in fresh, oxygen-rich air.";
@@ -385,7 +386,7 @@ void kinect() {
         image(context.depthImage(), 0, 0, 1920, 1080);
         fill(255, 0, 0);
         textSize(60);
-        text(userID, position.x * 3, position.y * 2.5, position.z);
+        text(userID, position.x * 3, position.y * 2.5, position.z); //scaled to 1920x1080 display
       }
     }
 
