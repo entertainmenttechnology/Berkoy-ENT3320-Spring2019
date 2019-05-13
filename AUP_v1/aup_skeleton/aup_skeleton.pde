@@ -58,6 +58,7 @@ boolean displayCOM= false;
 
 //FACE
 Face face; //creates new object from Face class
+boolean displayFace= false;
 //***callibrate face in draw***
 
 //JOKE STUFF
@@ -168,9 +169,11 @@ void draw() {
 
   //FACE**********************
   //**********************CALIBRATE FACE**********************
-  //background (255); //turn on for face callibration
+  if (displayFace==true){
+  clearDisplay("display2", 255, 255, 255);
   face.eye(2425, 880, 100, 100);  //x, y, width, height
   face.eye(2325, 680, 100, 100);
+  }
   
   /*
   //callibrate face
@@ -255,11 +258,13 @@ void keyPressed() {
     clearDisplay("display1", 0, 0, 0);
     display1_video_visible= true;
     display1_video= video1;
+    video1.stop();
     video1.play();
   } else if (key== 't') {
     clearDisplay("display1", 0, 0, 0);
     display1_video_visible= true;
     display1_video= video2;
+    video2.stop();
     video2.play();
   } 
 
@@ -288,6 +293,14 @@ void keyPressed() {
     displayDepthImage=false;
     displayCOM= false;
     clearDisplay("display1", 0, 0, 0);
+  }
+  
+  //DISPLAY FACE
+  if (key== 'f'){
+    displayFace= true;
+  } else if (key== 'g'){
+    clearDisplay("display2", 0, 0, 0);
+    displayFace= false;
   }
 }
 
