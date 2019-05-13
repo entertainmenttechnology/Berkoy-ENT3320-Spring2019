@@ -169,18 +169,18 @@ void draw() {
 
   //FACE**********************
   //**********************CALIBRATE FACE**********************
-  if (displayFace==true){
-  clearDisplay("display2", 255, 255, 255);
-  face.eye(2425, 880, 100, 100);  //x, y, width, height
-  face.eye(2325, 680, 100, 100);
+  if (displayFace==true) {
+    clearDisplay("display2", 255, 255, 255);
+    face.eye(2425, 880, 100, 100);  //x, y, width, height
+    face.eye(2325, 680, 100, 100);
   }
-  
+
   /*
   //callibrate face
-  fill(0);
-  ellipse (mouseX, mouseY, 100, 100);
-  println (mouseX, mouseY);
-  */
+   fill(0);
+   ellipse (mouseX, mouseY, 100, 100);
+   println (mouseX, mouseY);
+   */
 
   //TTS
   if (figure.isSpeaking()) {
@@ -294,11 +294,11 @@ void keyPressed() {
     displayCOM= false;
     clearDisplay("display1", 0, 0, 0);
   }
-  
+
   //DISPLAY FACE
-  if (key== 'f'){
+  if (key== 'f') {
     displayFace= true;
-  } else if (key== 'g'){
+  } else if (key== 'g') {
     clearDisplay("display2", 0, 0, 0);
     displayFace= false;
   }
