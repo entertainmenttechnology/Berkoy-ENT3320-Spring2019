@@ -1,4 +1,5 @@
 
+//modified masks to move left to right for vertical projection
 
 class Face {
   int x, y, w, h;
@@ -23,24 +24,24 @@ class Face {
 
     currentTime= millis();
     if ((currentTime- savedTime) > timer) {
-      eye= "down";
+      eye= "right";
       //println ("timer triggered");
       savedTime= currentTime;
       timer= int(random(4000, 12000));
     }
 
-    rect (x, y-h-10+move, w+10, h+10);
-    if (y-h-10+move< y-h-10) {
+    rect (x-w-10+move, y, w+10, h+10);
+    if (x-w-10+move< x-w-10) {
       eye= "still";
     }
-    if (y-h+move>y) {
-      eye="up";
+    if (x-w+move>x) {
+      eye="left";
     } 
-    if (eye =="up") {
-      move-=.8;
-    }
-    if (eye== "down") {
+    if (eye =="right") {
       move+=.8;
+    }
+    if (eye== "left") {
+      move-=.8;
     }
     if (eye== "still") {
       move=0;

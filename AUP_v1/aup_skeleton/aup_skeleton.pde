@@ -168,8 +168,16 @@ void draw() {
 
   //FACE**********************
   //**********************CALIBRATE FACE**********************
-  face.eye(width/2, height/3, 50, 50);  //x, y, width, height
-  face.eye(width/2 + 75, height/3, 50, 50);
+  //background (255); //turn on for face callibration
+  face.eye(2425, 880, 100, 100);  //x, y, width, height
+  face.eye(2325, 680, 100, 100);
+  
+  /*
+  //callibrate face
+  fill(0);
+  ellipse (mouseX, mouseY, 100, 100);
+  println (mouseX, mouseY);
+  */
 
   //TTS
   if (figure.isSpeaking()) {
