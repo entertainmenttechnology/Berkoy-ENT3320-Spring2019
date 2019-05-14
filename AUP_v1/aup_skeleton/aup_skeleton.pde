@@ -50,10 +50,18 @@ boolean silence= true;
 
 //KINECT STUFF
 import SimpleOpenNI.*;
-SimpleOpenNI context;
-int userCount=0;
-boolean displayDepthImage= false;
-boolean displayCOM= false;
+//RD - OnStage
+SimpleOpenNI kinect;  //declare object name it kinect
+float RX, RY; //initializing X and Y variable as float(decimal #)
+float RW = 140; // Setting the Rectangle width
+float RH = 130; // Setting the Rectangle Height
+float distance;
+float boundaryX;
+//AB
+int challenge= 0; 
+int userCount=0; 
+boolean displayDepthImage= false;  
+boolean displayCOM= false; 
 
 
 //FACE
@@ -153,12 +161,17 @@ void setup() {
   sound= sound1;
 
 
-  //ASSIGN MODE
+  //KINECT
   if (mode== "kinect") {  //**********************
-    context= new SimpleOpenNI(this);
-    context.enableDepth();
-    context.enableUser(); //SimpleOpenNI.SKEL_PROFILE_NONE
-    context.setMirror(true);
+    kinect= new SimpleOpenNI(this);
+    kinect.enableDepth();
+    kinect.enableRGB();;
+    kinect.enableUser(); //SimpleOpenNI.SKEL_PROFILE_NONE
+    //RD- CHALLENGE 1
+    //X and Y positions of the rectangle.
+     RX = width/2 - RW/2;  
+     RY = (height/2 - RW/2)*2;  
+    //kinect.setMirror(true);  //AB
   }
 }
 
@@ -190,8 +203,12 @@ void draw() {
   }
 
   //KINECT
-  if (mode== "kinect") {
-    kinect();
+  //if (mode== "kinect") { //AB
+    //kinect(); //AB
+  //}  //AB
+  
+  if (challenge==1){
+    challenge1();
   }
 
 
@@ -230,12 +247,14 @@ void draw() {
 void keyPressed() {
 
   //TTS, JOKE, DATA
-  if (key=='1') {
+  if (key=='5') {
     figure.speak("Hello, this is a text to speech demo. We are testing voices for legibility. How clearly can you understand me?");
-  } else if (key== '2') {
+  } else if (key== '6') {
     joke();
-  } else if (key== '3') {
+  } else if (key== '7') {
     aqi_report();
+  } else if (key== '1'){
+    challenge = 1;
   }
 
   //SAMPLE IMAGES AND VIDEOS
@@ -385,33 +404,74 @@ void fillRandomizer(String input [], int randomInput[]) {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-//KINECT STUFF
+//KINECT CHALLENGES
 
-void kinect() {
-  context.update();
-  //image(context.depthImage(), 0, 0);
-  userCount = context.getNumberOfUsers();
+void challenge1() {
+  kinect.update();
+  background(0);
+  image(kinect.rgbImage(), 0, 0, 1920, 1080); //scaled
   IntVector userList= new IntVector();
-  context.getUsers(userList);
+  kinect.getUsers(userList);
 
+  //create invisible rectangle with origin in the center of the sketch
+   noFill();
+   noStroke();
+   rect(RX, RY, RW,RH);
+
+  for (int i=0; i<userList.size(); i++) {   //loop to locate person in front of camera
+     int userId = userList.get(i);  //get id for each person in camera view
+     PVector position = new PVector();
+     kinect.getCoM(userId, position); 
+     kinect.convertRealWorldToProjective(position, position);
+     
+     distance = position.z / 25.4;
+     boundaryX = position.x / 25.4;
+     
+     //fill(255,0,0);
+    //    textAlign(CENTER);
+    //    textSize(40);
+    //   text(position.x/25.4, position.x, position.y);
+
+    //on/off stage
+     if(distance < 125 && boundaryX > 2 && boundaryX < 22 ){
+       fill(255,0,0);
+        textAlign(CENTER);
+        textSize(60);
+       text("On Stage", position.x * 3, position.y * 2.5); //scaled
+     }else{
+       fill(0,0,255);
+        textAlign(CENTER);
+        textSize(60);
+       text("Off Stage", position.x * 3, position.y * 2.5); //scaled
+     }
+  }
+}
+
+
+
+//////////////////////////////////////////////////////////////////
+//OLD - AB
+void kinect() { 
+  kinect.update();
+  userCount = kinect.getNumberOfUsers();
+  IntVector userList= new IntVector();
+  kinect.getUsers(userList);
 
   for (int u=0; u<userList.size(); u++) {
     int userID= userList.get(u);
     PVector position= new PVector();
-    context.getCoM( userID, position);
-    context.convertRealWorldToProjective(position, position);
+    kinect.getCoM( userID, position);
+    kinect.convertRealWorldToProjective(position, position);
 
     //USER IDS + COM DISPLAYED ONLY IF DEPTH IMAGE DISPLAYED
     if (displayDepthImage== true) { 
       if (displayCOM== true) {
-        image(context.depthImage(), 0, 0, 1920, 1080);
+        image(kinect.depthImage(), 0, 0, 1920, 1080);
         fill(255, 0, 0);
         textSize(60);
         text(userID, position.x * 3, position.y * 2.5, position.z); //scaled to 1920x1080 display
       }
     }
-
-
     println ("user ID: " + userID + " x: " + position.x + " Y  " + position.y + " z: " + position.z);
     println ("kinect:  " + " userCount: " + userCount);
   }
