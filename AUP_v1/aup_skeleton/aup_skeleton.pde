@@ -63,12 +63,17 @@ import SimpleOpenNI.*;
 //RD - OnStage
 SimpleOpenNI kinect;  //declare object name it kinect
 float RX, RY; //initializing X and Y variable as float(decimal #)
-float RW = 140; // Setting the Rectangle width
-float RH = 130; // Setting the Rectangle Height
+float RXV, RYV; //for Challenge 3
+float RW = 140; // Setting the Rectangle width Challenge 1 + 2
+float RH = 130; // Setting the Rectangle Height Challenge 1 + 2
+float RWV = 140; // Setting the Rectangle width Challenge 3
+float RHV = 130; // Setting the Rectangle Height Challenge 3
 float distance;
 float boundaryX;
 int stateKinect = 0; //modified from "state", duplicate
 int rand = -1;
+int totalTime= 0;
+String vote1 = "";
 //int begin; 
 //int duration = 5;
 //int time = 5;
@@ -87,7 +92,7 @@ String [] joke= {
   "Here we go. .  Did you hear about the guy whose entire left side was cut off? . . .  Do not worry. He is all right now!", 
   "Here we go. .  How do Hurricanes See? . . .  With one eye!", 
   "Here we go. .  What’s the difference between Weather and Climate? . . .  You can’t weather a tree, but you can climate.", 
-  "Here we go. .  What do cows produce during a hurricane?. . .  Milk shakes!", 
+  "Here we go. .  What do cows make during a hurricane?. . .  Milk shakes!", 
   "Here we go. .  Did you hear the joke about amnesia?. . .  I forgot how it goes! Hahaha!", 
   "Here we go. .  How do you gift wrap a cloud?. . .  With a rainbow!", 
   "Here we go. .  What did the Tsunami say to the island?. . .  Nothing. It just waved!", 
@@ -177,12 +182,15 @@ void setup() {
   if (mode== "kinect") {  //**********************
     kinect= new SimpleOpenNI(this);
     kinect.enableDepth();
-    kinect.enableRGB();;
+    kinect.enableRGB();
+    ;
     kinect.enableUser(); 
     //RD- CHALLENGE 1 + 2
     //X and Y positions of the rectangle.
-     RX = width/2 - RW/2;  
-     RY = (height/2 - RW/2)*2;  
+    RX = width/2 - RW/2;  //challenge 1 + 2 
+    RY = (height/2 - RW/2)*2;  //challenge 1 + 2
+    RXV = width/2;  // challenge 3
+    RYV = height/2;  // challenge 3
     //kinect.setMirror(true);  //AB
   }
 }
@@ -215,16 +223,16 @@ void draw() {
   }
 
   //KINECT
-  if (challenge==1){
+  if (challenge==1) {
     challenge1();
-  } else if (challenge==2){
+  } else if (challenge==2) {
     challenge2();
-  } else if (challenge==3){
+  } else if (challenge==3) {
     challenge3();
-  } else if (challenge==4){
+  } else if (challenge==4) {
     challenge4();
   }
-  
+
 
   //DISPLAY STUFF
   if (display1_image_visible== true) {
@@ -261,16 +269,20 @@ void draw() {
 void keyPressed() {
 
   //KINECT CHALLENGES
-  if (key== '1'){
+  if (key== '1') {
+    stateKinect=0;
     challenge = 1;
-  } else if (key=='2'){
+  } else if (key=='2') {
+    stateKinect=0;
     challenge=2;
-  } else if (key=='3'){
+  } else if (key=='3') {
+    stateKinect=0;
     challenge=3;
-  } else if (key=='4'){
+  } else if (key=='4') {
+    stateKinect=0;
     challenge=4;
   }
-  
+
   //TTS, JOKE, DATA
   else if (key=='5') {
     figure.speak("Hello, this is a text to speech demo. We are testing voices for legibility. How clearly can you understand me?");
@@ -326,18 +338,18 @@ void keyPressed() {
     sound.pause();
   }
 
-/*
+  /*
   //DISPLAY KINECT  -- AB/OLD
-  if (key== 'k') {
-    clearDisplay("display1", 0, 0, 0);
-    displayDepthImage= true;
-    displayCOM= true;
-  } else if (key=='l') {
-    displayDepthImage=false;
-    displayCOM= false;
-    clearDisplay("display1", 0, 0, 0);
-  }
-  */
+   if (key== 'k') {
+   clearDisplay("display1", 0, 0, 0);
+   displayDepthImage= true;
+   displayCOM= true;
+   } else if (key=='l') {
+   displayDepthImage=false;
+   displayCOM= false;
+   clearDisplay("display1", 0, 0, 0);
+   }
+   */
 
   //DISPLAY FACE
   if (key== 'f') {
@@ -440,41 +452,43 @@ void challenge1() {
   kinect.getUsers(userList);
 
   //create invisible rectangle with origin in the center of the sketch
-   noFill();
-   noStroke();
-   rect(RX, RY, RW,RH);
+  noFill();
+  noStroke();
+  rect(RX, RY, RW, RH);
 
   for (int i=0; i<userList.size(); i++) {   //loop to locate person in front of camera
-     int userId = userList.get(i);  //get id for each person in camera view
-     PVector position = new PVector();
-     kinect.getCoM(userId, position); 
-     kinect.convertRealWorldToProjective(position, position);
-     
-     distance = position.z / 25.4;
-     boundaryX = position.x / 25.4;
-     
-     //fill(255,0,0);
+    int userId = userList.get(i);  //get id for each person in camera view
+    PVector position = new PVector();
+    kinect.getCoM(userId, position); 
+    kinect.convertRealWorldToProjective(position, position);
+
+    distance = position.z / 25.4;
+    boundaryX = position.x / 25.4;
+
+    //fill(255,0,0);
     //    textAlign(CENTER);
     //    textSize(40);
     //   text(position.x/25.4, position.x, position.y);
 
     //on/off stage
-     if(distance < 125 && boundaryX > 2 && boundaryX < 22 ){
-       fill(255,0,0);
-        textAlign(CENTER);
-        textSize(60);
-       text("On Stage", position.x * 3, position.y * 2.5); //scaled
-     }else{
-       fill(0,0,255);
-        textAlign(CENTER);
-        textSize(60);
-       text("Off Stage", position.x * 3, position.y * 2.5); //scaled
-     }
+    if (distance < 125 && boundaryX > 2 && boundaryX < 22 ) {
+      fill(255, 0, 0);
+      textAlign(CENTER);
+      textSize(60);
+      text("On Stage", position.x * 3, position.y * 2.5); //scaled
+    } else {
+      fill(0, 0, 255);
+      textAlign(CENTER);
+      textSize(60);
+      text("Off Stage", position.x * 3, position.y * 2.5); //scaled
+    }
   }
 }
 
+////////////////////////////////////////////////////
+
 //COME TO STAGE
-void challenge2(){
+void challenge2() {
   kinect.update();
   background(0);
   image(kinect.rgbImage(), 0, 0, 1920, 1080); //scaled
@@ -487,8 +501,8 @@ void challenge2(){
   noStroke();
   rect(RX, RY, RW, RH);
 
- 
-  for (int i=0; i<userList.size() && stateKinect == 0; i++){  //run for loop to locate person in front of camera
+
+  for (int i=0; i<userList.size() && stateKinect == 0; i++) {  //run for loop to locate person in front of camera
     int userId = userList.get(i); //get an id for each person in the camera view.
     PVector position = new PVector();
     kinect.getCoM(userId, position); 
@@ -523,7 +537,7 @@ void challenge2(){
   }
 }
 
-void choosingPerson(){
+void choosingPerson() {
   int userIdChosen = rand + 1;
   PVector person1 = new PVector();
   kinect.getCoM(userIdChosen, person1); 
@@ -548,13 +562,199 @@ void choosingPerson(){
   }
 }
 
+////////////////////////////////////////////////////
 
 //VOTE
-void challenge3(){
-  
+void challenge3() {
+  kinect.update();
+  background(0);
+  image(kinect.rgbImage(), 0, 0, 1920, 1080); //scaled
+
+  IntVector userList = new IntVector();
+  kinect.getUsers(userList);
+
+  //create invisible rectangle with origin in the center of the sketch
+  noFill();
+  noStroke();
+  rect(RXV, RYV, RWV, RHV);
+
+  //run for loop to locate person in front of camera
+  for (int i=0; i<userList.size() && stateKinect == 0; i++) { 
+
+    //get an id for each person in the camera view.
+    int userId = userList.get(i);
+    PVector position = new PVector();
+
+    //Get Center of Mass
+    kinect.getCoM(userId, position); 
+    kinect.convertRealWorldToProjective(position, position);
+
+    //Find the distance between Kinect and an object in inches
+    distance = position.z / 25.4;
+
+    //Set an edge to the stage
+    boundaryX = position.x / 25.4;
+
+    //Set the boundaries for the stage
+    if (distance < 175 && boundaryX > 4 && boundaryX < 20) {
+      fill(0, 255, 0);
+      textAlign(CENTER);
+      textSize(60);
+      text(userId, position.x*3, position.y*2.5); //scaled
+
+      //Conditional to set the stateKinect 1 (con'e to the next stage) and create a random number if there are 3 users and stateKinect is 0
+      if (userId == 3 && stateKinect == 0) {
+        delay(3000);  //PROBLEM!!!****************
+        rand = int(random(userId));
+        stateKinect = 1;
+        println(rand +" " + stateKinect);
+      }
+    }
+  }
+  //Conditional to choose different people
+  //if random person chosen is a first on Kinect list and stateKinect = 1 which is the next from previous stage
+  if (rand == 0 && stateKinect == 1) {
+    choosingPersonVote();
+  } else if (rand == 1 && stateKinect == 1) { //<-- If random person chosen is  second on Kinect list
+    choosingPersonVote();
+  } else if (rand == 2 && stateKinect == 1) {//<-- If random person chosen is third on Kinect list of users
+    choosingPersonVote();
+  }
+  if (stateKinect == 2)//<-- After the person was chosen, go to stateKinect 2 where the rules of voting would be explained in votingRules() 
+  {
+    votingRules();
+  }
+  if (stateKinect == 3) { //<--After rules were explained go to stage three inside of VotingRules() and run votinQ1()
+    votingQ1();
+  }
+
+  if (stateKinect == 4) //<-- After the answer was recorded go to stage 4 and show the answer
+  {
+
+    int userIdChosen = rand + 1;
+    PVector person1 = new PVector();
+    kinect.getCoM(userIdChosen, person1); 
+    kinect.convertRealWorldToProjective(person1, person1);
+
+    stroke(0, 255, 255);
+    fill(0);
+    rect(320, 50, 450, 200);
+    fill(0, 255, 255);
+    textSize(30);
+    textAlign(CENTER);
+    text("Your answer was: " + vote1, 320, 50);
+  }
 }
 
+//Function to choose a person for Challenge 3
+void choosingPersonVote()
+{
+  int userIdChosen = rand + 1;
+  PVector person1 = new PVector();
+  kinect.getCoM(userIdChosen, person1); 
+  kinect.convertRealWorldToProjective(person1, person1);  
+  distance = person1.z / 25.4;
+  boundaryX = person1.x / 25.4;
+
+  //use timer for total and current times
+  if (totalTime == 0)
+  {
+    totalTime=millis()/1000 + 5;
+  }
+  int passedTime = totalTime - int(millis()/1000);
+  if (passedTime <= 0) {
+    totalTime = 0;
+    stateKinect = 2;
+  }
+
+  noFill();
+  strokeWeight(4);
+  stroke(0, 255, 0);
+  rect(person1.x*3, person1.y*2.5, 100, 200); //scaled
+  println (rand + " " + stateKinect);
+  stroke(0, 255, 255);
+  fill(0);
+  rect(person1.x*3, person1.y*2.5 - 160, 350, 80);
+  fill(0, 255, 255);
+  textSize(30);
+  textAlign(CENTER);
+  text("Get ready to vote in: " + passedTime, person1.x, person1.y -160);
+}   
+
+//Function to vote
+void votingRules()
+{
+
+  int userIdChosen = rand + 1;
+  PVector person1 = new PVector();
+  kinect.getCoM(userIdChosen, person1); 
+  kinect.convertRealWorldToProjective(person1, person1); 
+
+  text(userIdChosen, person1.x*3, person1.y*2.5); // scaled
+
+  if (totalTime == 0)
+  {
+    totalTime=millis()/1000 + 7;
+  }
+  int passedTime = totalTime - int(millis()/1000);
+  if (passedTime <= 0) {
+    totalTime=0;
+    stateKinect = 3;
+  }
+
+
+  println (rand + " " + stateKinect);
+  stroke(0, 255, 255);
+  fill(0);
+  rect(320, 50, 450, 200);
+  fill(0, 255, 255);
+  textSize(30);
+  textAlign(CENTER);
+  text("For the following statement,\nStand up if you agree,\nStay seated if you do not... ", 320, 50);
+}
+
+
+//Function for question 1
+void votingQ1()
+{
+
+  int userIdChosen = rand + 1;
+  PVector person1 = new PVector();
+  kinect.getCoM(userIdChosen, person1); 
+  kinect.convertRealWorldToProjective(person1, person1);
+  text(userIdChosen, person1.x*3, person1.y*2.5); // Print out numbers on people
+
+
+  if (totalTime == 0)
+  {
+    totalTime=millis()/1000 + 5;
+  }
+  int passedTime = totalTime - int(millis()/1000);
+  //Conditional to check if the person is standing or not
+  if (passedTime <= 0) {
+    //conditional if the person is within the boundaries of choosing area.
+    if ((person1.x >= RXV - (RWV/2)) && (person1.x < RXV + (RWV/2)) && (person1.y >= RYV - (RHV/2)) && (person1.y < RYV + (RHV/2))) 
+    {
+      vote1 = " NO!";
+    } else 
+    {
+      vote1=" YES!";
+    }
+    totalTime = 0;
+    stateKinect = 4;
+  }
+
+  stroke(0, 255, 255);
+  fill(0);
+  rect(320, 50, 450, 200);
+  fill(0, 255, 255);
+  textSize(30);
+  textAlign(CENTER);
+  text("Do you believe in strong \nsafety precautions in the \nworkplace? " + passedTime, 320, 50);
+}
+
+////////////////////////////////////////////////////
+
 //JUMP
-void challenge4(){
-  
+void challenge4() {
 }
