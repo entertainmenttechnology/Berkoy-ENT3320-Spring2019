@@ -523,7 +523,8 @@ void challenge2() {
     distance = position.z / 25.4;
     boundaryX = position.x / 25.4;
 
-    if (distance < 175 && boundaryX > 4 && boundaryX < 20) {
+//Detecting the person distance
+    if (distance < 175 && boundaryX > 0 && boundaryX < 24) {
       fill(0, 255, 0);
       textAlign(CENTER);
       textSize(60);
@@ -558,7 +559,7 @@ void choosingPerson() {
   boundaryX = person1.x / 25.4;
 
 
-  if (distance < 128 && boundaryX > 2 && boundaryX < 21.5 ) {
+  if (distance < 105 && boundaryX > 2 && boundaryX < 22 ) {
     fill(255, 0, 0);
     textAlign(CENTER);
     textSize(60);
@@ -586,8 +587,8 @@ void challenge3() {
   kinect.getUsers(userList);
 
   //create invisible rectangle with origin in the center of the sketch
-  noFill();
-  noStroke();
+  fill(255);
+  //noStroke(); //<------- TURNED OFF STROKE
   rect(RXV, RYV, RWV, RHV);
 
   //run for loop to locate person in front of camera
@@ -622,6 +623,8 @@ void challenge3() {
         println(rand +" " + stateKinect);
       }
     }
+        println ("x: " + position.x/25.4 + " y: " + position.y/25.4);
+
   }
   //Conditional to choose different people
   //if random person chosen is a first on Kinect list and stateKinect = 1 which is the next from previous stage
@@ -648,13 +651,14 @@ void challenge3() {
     kinect.getCoM(userIdChosen, person1); 
     kinect.convertRealWorldToProjective(person1, person1);
 
-    stroke(0, 255, 255);
-    fill(0);
-    rect(320, 50, 450, 200);
-    fill(0, 255, 255);
-    textSize(30);
-    textAlign(CENTER);
-    text("Your answer was: " + vote1, 320, 50);
+    //stroke(0, 255, 255);
+    //fill(0);
+    //DISPLAY
+    //rect(50, 50, 450, 200);
+    fill(255, 0, 0);
+    textSize(60);
+    //textAlign(CENTER);
+    text("Your answer was: " + vote1, 720, 100);
   }
 }
 
@@ -682,15 +686,16 @@ void choosingPersonVote()
   noFill();
   strokeWeight(4);
   stroke(0, 255, 0);
-  rect(person1.x*3, person1.y*2.5, 100, 200); //scaled
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
   println (rand + " " + stateKinect);
-  stroke(0, 255, 255);
-  fill(0);
-  rect(person1.x*3, person1.y*2.5 - 160, 350, 80);
-  fill(0, 255, 255);
-  textSize(30);
-  textAlign(CENTER);
-  text("Get ready to vote in: " + passedTime, person1.x, person1.y -160);
+  //stroke(0, 255, 255);
+  //fill(0);
+  //rect(50, 50, 350, 80);
+  fill(255, 0, 0);
+  textSize(60);
+  //textAlign(CENTER);
+  text("Get ready to vote in: " + passedTime, 720, 100);
 }   
 
 //Function to vote
@@ -716,13 +721,14 @@ void votingRules()
 
 
   println (rand + " " + stateKinect);
-  stroke(0, 255, 255);
-  fill(0);
-  rect(320, 50, 450, 200);
-  fill(0, 255, 255);
-  textSize(30);
-  textAlign(CENTER);
-  text("For the following statement,\nStand up if you agree,\nStay seated if you do not... ", 320, 50);
+  //stroke(0, 255, 255);
+  //fill(0);
+  //INSTRUCTIONS BOX
+  //rect( 50, 50, 450, 200);
+  fill(255, 0, 0);
+  textSize(60);
+  //textAlign(CENTER);
+  text("For the following statement,\nStand up if you agree,\nStay seated if you do not... ", 720, 100);
 }
 
 
@@ -745,7 +751,8 @@ void votingQ1()
   //Conditional to check if the person is standing or not
   if (passedTime <= 0) {
     //conditional if the person is within the boundaries of choosing area.
-    if ((person1.x >= RXV - (RWV/2)) && (person1.x < RXV + (RWV/2)) && (person1.y >= RYV - (RHV/2)) && (person1.y < RYV + (RHV/2))) 
+      //println ("x: " + person1.x/25.4 + " y: " + person1.y/25.4);
+    if ((person1.x/25.4 >= 8) && (person1.x/25.4 < 18) && (person1.y/25.4 >= 9) && (person1.y/25.4 < 11)) 
     {
       vote1 = " NO!";
     } else 
@@ -756,13 +763,13 @@ void votingQ1()
     stateKinect = 4;
   }
 
-  stroke(0, 255, 255);
-  fill(0);
-  rect(320, 50, 450, 200);
-  fill(0, 255, 255);
-  textSize(30);
-  textAlign(CENTER);
-  text("Do you believe in strong \nsafety precautions in the \nworkplace? " + passedTime, 320, 50);
+  //stroke(0, 255, 255);
+  //fill(0);
+  //rect(50, 50, 450, 200);
+  fill(255, 0, 0);
+  textSize(60);
+  //textAlign(CENTER);
+  text("Do you believe in strong \nsafety precautions in the \nworkplace? " + passedTime, 720, 100);
 }
 
 ////////////////////////////////////////////////////
