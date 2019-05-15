@@ -482,7 +482,7 @@ void challenge1() {
     //   text(position.x/25.4, position.x, position.y);
 
     //on/off stage
-    if (distance < 125 && boundaryX > 2 && boundaryX < 22 ) {
+    if (distance < 105 && boundaryX > 2 && boundaryX < 22 ) {
       fill(255, 0, 0);
       textAlign(CENTER);
       textSize(60);
@@ -493,6 +493,7 @@ void challenge1() {
       textSize(60);
       text("Off Stage", position.x * 3, position.y * 2.5); //scaled
     }
+    println ("x: " + position.x/25.4 + " y: " + position.y/25.4 + " z:" + position.z/25.4);
   }
 }
 
