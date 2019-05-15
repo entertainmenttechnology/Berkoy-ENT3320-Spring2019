@@ -3,13 +3,15 @@
  AUP SKELETON
  
  TESTING:
- Press keys 1-3 + q-i to test (see below).
- 'k' to display Kinect, 'l' to stop/clear.
+ Press keys 1-7 + q-i to test (see below).
+ 
+ POSITIONING:
+ Set Kinect 9 squares away from chair. (?)
  
  DISPLAYS:
  Triple-display output: laptop screen, monitor, projector. 
  Calibrate display arrangement in system preferences. 
- Drag output window to align.
+ Set in Processing preferences, or drag output window to align.
  
  VOICES:
  Install voices from https://www.assistiveware.com/products/infovox-ivox . 
@@ -20,6 +22,14 @@
  Uses Minim Library for sound. 
  Install from Processing Contributed Libraries.
  Reference at http://code.compartmental.net/minim/ under AudioPlayer
+ 
+ CREDITS:
+ Prototype V1 developed by MTEC students enrolled in ENT 3320 
+ in collaboration with Prof Berkoy, at NYCCT, Spring 19.
+ Challenges developed by Johnny, Daniel, Anthony, Oleg.
+ Display and TTS testing by Alberto.
+ Additional contributions and content by Sabrina, William, and Brian.
+ Other code by Berkoy.
  
  ////////////////////////////////////////////////////////
  */
@@ -57,11 +67,13 @@ float RW = 140; // Setting the Rectangle width
 float RH = 130; // Setting the Rectangle Height
 float distance;
 float boundaryX;
+int stateKinect = 0; //modified from "state", duplicate
+int rand = -1;
+//int begin; 
+//int duration = 5;
+//int time = 5;
 //AB
 int challenge= 0; 
-int userCount=0; 
-boolean displayDepthImage= false;  
-boolean displayCOM= false; 
 
 
 //FACE
@@ -166,8 +178,8 @@ void setup() {
     kinect= new SimpleOpenNI(this);
     kinect.enableDepth();
     kinect.enableRGB();;
-    kinect.enableUser(); //SimpleOpenNI.SKEL_PROFILE_NONE
-    //RD- CHALLENGE 1
+    kinect.enableUser(); 
+    //RD- CHALLENGE 1 + 2
     //X and Y positions of the rectangle.
      RX = width/2 - RW/2;  
      RY = (height/2 - RW/2)*2;  
@@ -203,14 +215,16 @@ void draw() {
   }
 
   //KINECT
-  //if (mode== "kinect") { //AB
-    //kinect(); //AB
-  //}  //AB
-  
   if (challenge==1){
     challenge1();
+  } else if (challenge==2){
+    challenge2();
+  } else if (challenge==3){
+    challenge3();
+  } else if (challenge==4){
+    challenge4();
   }
-
+  
 
   //DISPLAY STUFF
   if (display1_image_visible== true) {
@@ -233,7 +247,7 @@ void draw() {
     }
     image (display2_video, display1_width, 0);
   }
-  //KINECT NOTE: SEE DISPLAY IN KINECT();
+  //KINECT NOTE: SEE DISPLAY IN KINECT CHALLENGES;
 }
 
 
@@ -246,16 +260,25 @@ void draw() {
 //FOR TESTING
 void keyPressed() {
 
+  //KINECT CHALLENGES
+  if (key== '1'){
+    challenge = 1;
+  } else if (key=='2'){
+    challenge=2;
+  } else if (key=='3'){
+    challenge=3;
+  } else if (key=='4'){
+    challenge=4;
+  }
+  
   //TTS, JOKE, DATA
-  if (key=='5') {
+  else if (key=='5') {
     figure.speak("Hello, this is a text to speech demo. We are testing voices for legibility. How clearly can you understand me?");
   } else if (key== '6') {
     joke();
   } else if (key== '7') {
     aqi_report();
-  } else if (key== '1'){
-    challenge = 1;
-  }
+  } 
 
   //SAMPLE IMAGES AND VIDEOS
   if (key== 'q') {
@@ -303,7 +326,8 @@ void keyPressed() {
     sound.pause();
   }
 
-  //DISPLAY KINECT
+/*
+  //DISPLAY KINECT  -- AB/OLD
   if (key== 'k') {
     clearDisplay("display1", 0, 0, 0);
     displayDepthImage= true;
@@ -313,6 +337,7 @@ void keyPressed() {
     displayCOM= false;
     clearDisplay("display1", 0, 0, 0);
   }
+  */
 
   //DISPLAY FACE
   if (key== 'f') {
@@ -406,7 +431,8 @@ void fillRandomizer(String input [], int randomInput[]) {
 
 //KINECT CHALLENGES
 
-void challenge1() {
+//ONSTAGE
+void challenge1() {  
   kinect.update();
   background(0);
   image(kinect.rgbImage(), 0, 0, 1920, 1080); //scaled
@@ -447,32 +473,88 @@ void challenge1() {
   }
 }
 
-
-
-//////////////////////////////////////////////////////////////////
-//OLD - AB
-void kinect() { 
+//COME TO STAGE
+void challenge2(){
   kinect.update();
-  userCount = kinect.getNumberOfUsers();
-  IntVector userList= new IntVector();
+  background(0);
+  image(kinect.rgbImage(), 0, 0, 1920, 1080); //scaled
+
+  IntVector userList = new IntVector();
   kinect.getUsers(userList);
 
-  for (int u=0; u<userList.size(); u++) {
-    int userID= userList.get(u);
-    PVector position= new PVector();
-    kinect.getCoM( userID, position);
+  //create invisible rectangle with origin in the center of the sketch
+  noFill();
+  noStroke();
+  rect(RX, RY, RW, RH);
+
+ 
+  for (int i=0; i<userList.size() && stateKinect == 0; i++){  //run for loop to locate person in front of camera
+    int userId = userList.get(i); //get an id for each person in the camera view.
+    PVector position = new PVector();
+    kinect.getCoM(userId, position); 
     kinect.convertRealWorldToProjective(position, position);
 
-    //USER IDS + COM DISPLAYED ONLY IF DEPTH IMAGE DISPLAYED
-    if (displayDepthImage== true) { 
-      if (displayCOM== true) {
-        image(kinect.depthImage(), 0, 0, 1920, 1080);
-        fill(255, 0, 0);
-        textSize(60);
-        text(userID, position.x * 3, position.y * 2.5, position.z); //scaled to 1920x1080 display
+    distance = position.z / 25.4;
+    boundaryX = position.x / 25.4;
+
+    if (distance < 175 && boundaryX > 4 && boundaryX < 20) {
+      fill(0, 255, 0);
+      textAlign(CENTER);
+      textSize(60);
+      text(userId, position.x * 3, position.y * 2.5); // scaled
+
+
+      if (userId == 3 && stateKinect == 0) {
+        delay(3000); //****************PROBLEM!
+        rand = int(random(userId));
+        stateKinect = 1;
+        println(rand +" " + stateKinect);
       }
     }
-    println ("user ID: " + userID + " x: " + position.x + " Y  " + position.y + " z: " + position.z);
-    println ("kinect:  " + " userCount: " + userCount);
   }
+
+
+  if (rand == 0 && stateKinect == 1) {
+    choosingPerson();
+  } else if (rand == 1 && stateKinect == 1) {
+    choosingPerson();
+  } else if (rand == 2 && stateKinect == 1) {
+    choosingPerson();
+  }
+}
+
+void choosingPerson(){
+  int userIdChosen = rand + 1;
+  PVector person1 = new PVector();
+  kinect.getCoM(userIdChosen, person1); 
+  kinect.convertRealWorldToProjective(person1, person1);  
+  distance = person1.z / 25.4;
+  boundaryX = person1.x / 25.4;
+
+
+  if (distance < 128 && boundaryX > 2 && boundaryX < 21.5 ) {
+    fill(255, 0, 0);
+    textAlign(CENTER);
+    textSize(60);
+    text("On Stage", person1.x*3, person1.y*2.5); //scaled
+  } else {
+    noFill();
+    strokeWeight(4);
+    stroke(0, 255, 0);
+    rectMode(CENTER);
+    rect(person1.x*3, person1.y*2.5, 100, 200);
+    println (rand + " " + stateKinect);
+    text("Come on to stage", person1.x*3, person1.y*2.5 + 100);
+  }
+}
+
+
+//VOTE
+void challenge3(){
+  
+}
+
+//JUMP
+void challenge4(){
+  
 }
