@@ -64,16 +64,25 @@ import SimpleOpenNI.*;
 SimpleOpenNI kinect;  //declare object name it kinect
 float RX, RY; //initializing X and Y variable as float(decimal #)
 float RXV, RYV; //for Challenge 3
+float RXJ, RYJ; //for Challenge 4
 float RW = 140; // Setting the Rectangle width Challenge 1 + 2
 float RH = 130; // Setting the Rectangle Height Challenge 1 + 2
 float RWV = 140; // Setting the Rectangle width Challenge 3
 float RHV = 130; // Setting the Rectangle Height Challenge 3
+float RWJ = 140; // Setting the Rectangle width Challenge 4
+float RHJ = 130; // Setting the Rectangle Height Challenge 4
 float distance;
 float boundaryX;
 int stateKinect = 0; //modified from "state", duplicate
 int rand = -1;
 int totalTime= 0;
 String vote1 = "";
+float jumpY;
+float[] y = new float[height];
+float a = 0;
+float b = 0;
+float c = 0;
+float lowest = 1000;
 //int begin; 
 //int duration = 5;
 //int time = 5;
@@ -191,6 +200,8 @@ void setup() {
     RY = (height/2 - RW/2)*2;  //challenge 1 + 2
     RXV = width/2;  // challenge 3
     RYV = height/2;  // challenge 3
+    RXJ = width/2 - RW/2;  //challenge 4
+    RYJ = (height/2 - RW/2)*2;  //challenge 4
     //kinect.setMirror(true);  //AB
   }
 }
@@ -757,4 +768,188 @@ void votingQ1()
 
 //JUMP
 void challenge4() {
+  kinect.update();
+  background(0);
+  image(kinect.rgbImage(), 0, 0, 1920,1080); //scaled
+
+  IntVector userList = new IntVector();
+  kinect.getUsers(userList);
+
+  //create invisible rectangle with origin in the center of the sketch
+  noFill();
+  noStroke();
+  rect(RXJ, RYJ, RWJ, RHJ);
+
+//run for loop to locate person in front of camera
+  for (int i=0; i<userList.size() && stateKinect == 0; i++) { 
+
+    //get an id for each person in the camera view.
+    int userId = userList.get(i);
+    PVector position = new PVector();
+
+    kinect.getCoM(userId, position); 
+    kinect.convertRealWorldToProjective(position, position);
+
+    distance = position.z / 25.4;
+    boundaryX = position.x / 25.4;
+
+    if (distance < 175 && boundaryX > 4 && boundaryX < 20) {
+      fill(0, 255, 0);
+      textAlign(CENTER);
+      textSize(40);
+      text(userId, position.x*3, position.y*2.5); // Print out numbers on people
+
+if (userId == 3 && stateKinect == 0) {
+        delay(3000); //PROBLEM **********************
+        rand = int(random(userId));
+        stateKinect = 1;
+        println(rand +" " + stateKinect);
+      }
+    }
+  }
+  if (rand == 0 && stateKinect == 1) {
+    choosingPersonJump();
+  } else if (rand == 1 && stateKinect == 1) {
+    choosingPersonJump();
+  } else if (rand == 2 && stateKinect == 1) {
+    choosingPersonJump();
+  }
+  if (stateKinect== 2)
+  {
+    jumpingStart();
+  }
+  if (stateKinect==3)
+  {
+    jump();
+  }
+  if (stateKinect==4)
+  {
+    postJump();
+  }
+}
+
+void choosingPersonJump()
+{
+  int userIdChosen = rand + 1;
+  PVector person1 = new PVector();
+  kinect.getCoM(userIdChosen, person1); 
+  kinect.convertRealWorldToProjective(person1, person1);  
+  distance = person1.z / 25.4;
+  boundaryX = person1.x / 25.4;
+
+  if (distance < 128 && boundaryX > 2 && boundaryX < 21.5 ) {
+    stroke(0, 255, 255);
+    fill(0);
+    rect(person1.x, person1.y - 160, 350, 80);
+    fill(0, 255, 255);
+    textSize(30);
+    textAlign(CENTER);
+    text("Welcome!", person1.x*3, person1.y*2.5 -160);
+    if (totalTime == 0)
+    {
+      totalTime=millis()/1000 + 4;
+    }
+    int passedTime = totalTime - int(millis()/1000);
+    if (passedTime <= 0) 
+    {
+      totalTime=0;
+      stateKinect = 2;
+    }
+  } else {
+    noFill();
+    strokeWeight(4);
+    stroke(0, 255, 0);
+    rectMode(CENTER);
+    rect(person1.x*3, person1.y*2.5, 100, 200);
+    println (rand + " " + stateKinect);
+    stroke(0, 255, 255);
+    fill(0);
+    rect(person1.x*3, person1.y*2.5 - 160, 350, 80);
+    fill(0, 255, 255);
+    textSize(30);
+    textAlign(CENTER);
+    text("Come to the stage!\nQuick!", person1.x*3, person1.y*2.5 -160);
+  }
+}
+
+void jumpingStart()
+{
+  int userIdChosen = rand + 1;
+  PVector person1 = new PVector();
+  kinect.getCoM(userIdChosen, person1); 
+  kinect.convertRealWorldToProjective(person1, person1);  
+  distance = person1.z / 25.4;
+  boundaryX = person1.x / 25.4;
+  //jumpY = person1.y/5.4;
+
+  a = person1.y;
+  if (totalTime == 0)
+  {
+    totalTime=millis()/1000 + 8;
+  }
+  int passedTime = totalTime - int(millis()/1000);
+  if (passedTime <= 0) 
+  {
+    totalTime=0;
+    stateKinect = 3;
+  }
+  stroke(0, 255, 255);
+  fill(0);
+  rect(width/2, height, 360, 240);
+  fill(0, 255, 255);
+  text(a, person1.x*3, person1.y*2.5);
+  textSize(28);
+  textAlign(CENTER);
+  text("Let's see how high you \ncan jump! Get ready!\n" + passedTime + "...", width/2, height-90);
+}
+void jump()
+{
+  int userIdChosen = rand + 1;
+  PVector person1 = new PVector();
+  kinect.getCoM(userIdChosen, person1); 
+  kinect.convertRealWorldToProjective(person1, person1);  
+  distance = person1.z / 25.4;
+  boundaryX = person1.x / 25.4;
+  jumpY = person1.y/5.4;
+  text(b, person1.x*3, person1.y*2.5);
+  
+  if (totalTime == 0)
+    {
+      totalTime=millis()/1000 + 3;
+    }
+    int passedTime = totalTime - int(millis()/1000);
+    if (passedTime <= 0) 
+    {
+      totalTime=0;
+      stateKinect = 4;
+    }
+    
+    if(person1.y < a)
+    {
+      b = person1.y;
+      if(b<lowest){
+        lowest = b;
+      }
+      
+    }
+    
+  stroke(0, 255, 255);
+  fill(0);
+  rect(width/2, height, 360, 240);
+  fill(0, 255, 255);
+  textSize(28);
+  textAlign(CENTER);
+  text("JUMP!", width/2, height-90);
+  //Tell the participants to keep their arms down
+  //Messes with the center of mass if they don't
+}
+
+void postJump()
+{
+  c = a - lowest;
+  c = c / 5.4;
+  println("jump height is:  " + c);
+  println("B was: " + b);
+  println("A was: " + a);
+  println("lowest was: " + lowest);
 }
