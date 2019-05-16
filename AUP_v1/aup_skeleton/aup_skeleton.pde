@@ -704,7 +704,7 @@ void challenge3() {
     //Set an edge to the stage
     boundaryX = position.x / 25.4;
 
-    //Set the boundaries for the stage
+    //Set the boundaries for the seats
     if (distance < 175 && boundaryX > 4 && boundaryX < 20) {
       fill(0, 255, 0);
       textAlign(CENTER);
@@ -726,6 +726,9 @@ void challenge3() {
   //if random person chosen is a first on Kinect list and stateKinect = 1 which is the next from previous stage
   if (rand == 0 && stateKinect == 1) {
     choosingPersonVote();
+  //  stroke(0, 255, 0);
+  //rectMode(CENTER);
+  //rect(position.x*3, position.y*2.5, 350, 800); //scaled
   } else if (rand == 1 && stateKinect == 1) { //<-- If random person chosen is  second on Kinect list
     choosingPersonVote();
   } else if (rand == 2 && stateKinect == 1) {//<-- If random person chosen is third on Kinect list of users
@@ -804,6 +807,11 @@ void votingRules()
   kinect.convertRealWorldToProjective(person1, person1); 
 
   text(userIdChosen, person1.x*3, person1.y*2.5); // scaled
+  //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
 
   if (totalTime == 0)
   {
@@ -837,7 +845,11 @@ void votingQ1()
   kinect.getCoM(userIdChosen, person1); 
   kinect.convertRealWorldToProjective(person1, person1);
   text(userIdChosen, person1.x*3, person1.y*2.5); // Print out numbers on people
-
+  //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
 
   if (totalTime == 0)
   {
@@ -942,14 +954,19 @@ void choosingPersonJump()
   distance = person1.z / 25.4;
   boundaryX = person1.x / 25.4;
 
-  if (distance < 128 && boundaryX > 2 && boundaryX < 21.5 ) {
+  if (distance < 105 && boundaryX > 2 && boundaryX < 22 ) {
     stroke(0, 255, 255);
-    fill(0);
-    rect(person1.x, person1.y - 160, 350, 80);
+    //fill(0);
+    //rect(person1.x, person1.y - 160, 350, 80);
     fill(0, 255, 255);
-    textSize(30);
+    textSize(60);
     textAlign(CENTER);
     text("Welcome!", person1.x*3, person1.y*2.5 -160);
+    //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
     if (totalTime == 0)
     {
       totalTime=millis()/1000 + 4;
@@ -964,16 +981,21 @@ void choosingPersonJump()
     noFill();
     strokeWeight(4);
     stroke(0, 255, 0);
-    rectMode(CENTER);
-    rect(person1.x*3, person1.y*2.5, 100, 200);
+   // rectMode(CENTER);
+   // rect(person1.x*3, person1.y*2.5, 100, 200);
     println (rand + " " + stateKinect);
     stroke(0, 255, 255);
     fill(0);
-    rect(person1.x*3, person1.y*2.5 - 160, 350, 80);
+    //rect(person1.x*3, person1.y*2.5 - 160, 350, 80);
     fill(0, 255, 255);
-    textSize(30);
+    textSize(60);
     textAlign(CENTER);
     text("Come to the stage!\nQuick!", person1.x*3, person1.y*2.5 -160);
+    //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
   }
 }
 
@@ -1000,12 +1022,17 @@ void jumpingStart()
   }
   stroke(0, 255, 255);
   fill(0);
-  rect(width/2, height, 360, 240);
+  //rect(width/2, height, 360, 240);
   fill(0, 255, 255);
-  text(a, person1.x*3, person1.y*2.5);
-  textSize(28);
+  //text(a, person1.x*3, person1.y*2.5);
+  textSize(60);
   textAlign(CENTER);
-  text("Let's see how high you \ncan jump! Get ready!\n" + passedTime + "...", width/2, height-90);
+  text("Let's see how high you \ncan jump! Get ready!\n" + passedTime + "...", width/4, 200);
+  //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
 }
 void jump()
 {
@@ -1016,7 +1043,7 @@ void jump()
   distance = person1.z / 25.4;
   boundaryX = person1.x / 25.4;
   jumpY = person1.y/5.4;
-  text(b, person1.x*3, person1.y*2.5);
+  //text(b, person1.x*3, person1.y*2.5);
   
   if (totalTime == 0)
     {
@@ -1040,11 +1067,11 @@ void jump()
     
   stroke(0, 255, 255);
   fill(0);
-  rect(width/2, height, 360, 240);
+  //rect(width/2, height, 360, 240);
   fill(0, 255, 255);
-  textSize(28);
+  textSize(60);
   textAlign(CENTER);
-  text("JUMP!", width/2, height-90);
+  text("JUMP!", width/4, 500);
   //Tell the participants to keep their arms down
   //Messes with the center of mass if they don't
 }
@@ -1057,4 +1084,7 @@ void postJump()
   println("B was: " + b);
   println("A was: " + a);
   println("lowest was: " + lowest);
+  textSize(60);
+  text("You jumped: " + int(c) + " inches!", width/4, 100);
+  
 }
