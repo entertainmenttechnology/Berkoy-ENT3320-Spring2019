@@ -3,7 +3,9 @@
  AUP SKELETON
  
  TESTING:
- Press keys 1-7 + q-i to test (see below).
+ Press keys to test (see below).
+ 'q' for blue-monitor + red-projector callibration.
+ 1, 2, 3, 4 for challenges.
  
  POSITIONING:
  Set Kinect 9 squares away from chair. (?)
@@ -266,6 +268,7 @@ void draw() {
     }
     image (display2_video, display1_width, 0);
   }
+  println(state);
   //KINECT NOTE: SEE DISPLAY IN KINECT CHALLENGES;
 }
 
@@ -301,10 +304,33 @@ void keyPressed() {
     joke();
   } else if (key== '7') {
     aqi_report();
-  } 
+  } else if (key== '8'){
+    beat();
+  } else if (key== '9'){
+    shake();
+  } else if (key == '0'){
+    es();
+  }
+
+//OTHER SHOW FUNCTIONS
+else if (key == 'p'){
+  preShow();
+} else if (key == 's'){
+  startShow();
+} else if (key == 'a'){
+  welcome();
+} else if (key == 'd'){
+  explain(1);
+} else if (key == 'g'){
+  explain(2);
+} else if (key == 'h'){
+  explain(3);
+} else if (key == 'j'){
+  finale();
+}
 
   //SAMPLE IMAGES AND VIDEOS
-  if (key== 'q') {
+  else if (key== 'q') {
     //blue on display 1, red on display 2
     clearDisplay ("display1", 0, 0, 255);
     clearDisplay ("display2", 255, 0, 0);
@@ -387,6 +413,7 @@ void clearDisplay(String whichDisplay, int r, int g, int b) {
 
 //JOKE
 void joke() {
+  state= "joke";
   handle(joke, "joke", whichJoke, randomJoke);
   whichJoke= currentInput;
   figure.speak(text);
@@ -395,6 +422,7 @@ void joke() {
 
 //JSON DATA (AQI)
 void aqi_report() {
+  state= "aqi";
   if (aqi >= 0 && aqi <= 50) {
     aqi_desc= "good. . . Air quality is satisfactory and poses little or no health risk. . . Ventilating your home is recommended. . . Recommendations. . . Enjoy your usual outdoor activities. We recommend opening your windows and ventilating your home to bring in fresh, oxygen-rich air.";
   } else if (aqi >= 51 && aqi <= 100) {
@@ -410,6 +438,71 @@ void aqi_report() {
   }
 
   figure.speak ("The current Air Quality Index for New York City is " + aqi + " . . . " + "This means that the air quality is . . ." + aqi_desc);
+}
+
+void beat(){
+  state= "beat";
+  if (silence==true){
+  figure.speak ("beat.");
+  }
+}
+
+void shake(){
+   state= "shake";
+  if (silence==true){
+  figure.speak ("shake.");
+  }
+}
+
+void es(){
+   state= "es";
+  if (silence==true){
+  figure.speak ("emergency simulation.");
+  }
+}
+
+void preShow (){
+  state= "preShow";
+  if (silence==true){
+  figure.speak ("pre show.");
+  }
+}
+
+void startShow(){
+  state= "show";
+  if (silence==true){
+  figure.speak ("show.");
+  }
+}
+
+void welcome(){
+   state= "welcome";
+  if (silence==true){
+  figure.speak ("welcome.");
+  }
+}
+
+void explain(int i){
+  if (i==1){
+     state= "explain1";
+      if (silence==true){
+      figure.speak ("explain 1.");
+  }} else if (i==2){
+    state= "explain2";
+      if (silence==true){
+      figure.speak ("explain 2.");
+  }} else if (i==3){
+    state= "explain3";
+      if (silence==true){
+      figure.speak ("explain 3.");
+  }}
+}
+
+void finale(){
+  state= "finale";
+  if (silence==true){
+  figure.speak ("finale.");
+  }
 }
 
 
@@ -455,7 +548,8 @@ void fillRandomizer(String input [], int randomInput[]) {
 //KINECT CHALLENGES
 
 //ONSTAGE
-void challenge1() {  
+void challenge1() { 
+  state= "challenge1";
   kinect.update();
   background(0);
   image(kinect.rgbImage(), 0, 0, 1920, 1080); //scaled
@@ -501,6 +595,7 @@ void challenge1() {
 
 //COME TO STAGE
 void challenge2() {
+  state= "challenge2";
   kinect.update();
   background(0);
   image(kinect.rgbImage(), 0, 0, 1920, 1080); //scaled
@@ -579,6 +674,7 @@ void choosingPerson() {
 
 //VOTE
 void challenge3() {
+  state= "challenge3";
   kinect.update();
   background(0);
   image(kinect.rgbImage(), 0, 0, 1920, 1080); //scaled
@@ -776,6 +872,7 @@ void votingQ1()
 
 //JUMP
 void challenge4() {
+  state= "challenge4";
   kinect.update();
   background(0);
   image(kinect.rgbImage(), 0, 0, 1920,1080); //scaled
