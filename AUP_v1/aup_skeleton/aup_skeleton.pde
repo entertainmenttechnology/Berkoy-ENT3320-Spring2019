@@ -812,11 +812,7 @@ void votingRules()
   kinect.getCoM(userIdChosen, person1); 
   kinect.convertRealWorldToProjective(person1, person1); 
 
-<<<<<<< HEAD
   //text(userIdChosen, person1.x*3, person1.y*2.5); // scaled
-=======
-  text(userIdChosen, person1.x*3, person1.y*2.5); // scaled
->>>>>>> 0790028864d50201ce4944b81fae4766db65100c
   //green rectangle
   noFill();
   stroke(0, 255, 0);
@@ -854,11 +850,7 @@ void votingQ1()
   PVector person1 = new PVector();
   kinect.getCoM(userIdChosen, person1); 
   kinect.convertRealWorldToProjective(person1, person1);
-<<<<<<< HEAD
   //text(userIdChosen, person1.x*3, person1.y*2.5); // Print out numbers on people
-=======
-  text(userIdChosen, person1.x*3, person1.y*2.5); // Print out numbers on people
->>>>>>> 0790028864d50201ce4944b81fae4766db65100c
   //green rectangle
   noFill();
   stroke(0, 255, 0);
@@ -976,12 +968,9 @@ void choosingPersonJump()
     textSize(60);
     textAlign(CENTER);
     text("Welcome!", person1.x*3, person1.y*2.5 -160);
-<<<<<<< HEAD
     if (silence==true){
       figure.speak ("welcome! .  .  . . . . ");
   }
-=======
->>>>>>> 0790028864d50201ce4944b81fae4766db65100c
     //green rectangle
   noFill();
   stroke(0, 255, 0);
@@ -1011,12 +1000,9 @@ void choosingPersonJump()
     textSize(60);
     textAlign(CENTER);
     text("Come to the stage!\nQuick!", person1.x*3, person1.y*2.5 -160);
-<<<<<<< HEAD
     if (silence==true){
       figure.speak ("come to the stage! stand on the x");
   }
-=======
->>>>>>> 0790028864d50201ce4944b81fae4766db65100c
     //green rectangle
   noFill();
   stroke(0, 255, 0);
@@ -1054,12 +1040,9 @@ void jumpingStart()
   textSize(60);
   textAlign(CENTER);
   text("Let's see how high you \ncan jump! Get ready!\n" + passedTime + "...", width/4, 200);
-<<<<<<< HEAD
   if (silence==true){
       figure.speak ("get ready to jump! .   ");
   }
-=======
->>>>>>> 0790028864d50201ce4944b81fae4766db65100c
   //green rectangle
   noFill();
   stroke(0, 255, 0);
@@ -1104,12 +1087,9 @@ void jump()
   textSize(60);
   textAlign(CENTER);
   text("JUMP!", width/4, 500);
-<<<<<<< HEAD
   if (silence==true){
       figure.speak ("jump! .  .  .");
   }
-=======
->>>>>>> 0790028864d50201ce4944b81fae4766db65100c
   //Tell the participants to keep their arms down
   //Messes with the center of mass if they don't
 }
@@ -1124,11 +1104,8 @@ void postJump()
   println("lowest was: " + lowest);
   textSize(60);
   text("You jumped: " + int(c) + " inches!", width/4, 100);
-<<<<<<< HEAD
   if (silence==true){
       figure.speak ("you jumped " + int(c) + "inches .  .  .  . .  .  .  .  .  . ");
   }
-=======
->>>>>>> 0790028864d50201ce4944b81fae4766db65100c
   
 }
