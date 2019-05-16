@@ -118,17 +118,6 @@ String aqi_desc = "";
 String air_key= "KwYLLNsmAx4de4gaS";  //AB's key 
 String url = "http://api.airvisual.com/v2/city?city=New%20York&state=New%20York&country=USA&key=" + air_key;
 
-//VIDEOS
-Movie [] beats = new Movie [3];
-int whichBeats;
-int[] randomBeats= new int [beats.length];
-Movie [] ess = new Movie [4];
-int whichEss;
-int[] randomEss= new int [ess.length];
-Movie [] shakes = new Movie [4];
-int whichShakes;
-int[] randomShakes= new int [shakes.length];
-
 //SAMPLE ASSETS
 PImage face1, face2, face3;
 PImage back1, back2, back3, back4, back5;
@@ -179,19 +168,6 @@ void setup() {
   JSONObject nyc_air = loadJSONObject(url); //load the entire Object
   JSONObject pollution = nyc_air.getJSONObject("data").getJSONObject("current").getJSONObject("pollution"); //get object within objects
   aqi = pollution.getInt("aqius"); //here's the aqi!
-
-  //LOAD VIDEOS
- beats[0]= new Movie(this, "video/beat/beat1.MOV");
- beats[1]= new Movie(this, "video/beat/beat2.MOV");
- beats[2]= new Movie(this, "video/beat/beat3.MOV");
-  ess[0]= new Movie(this, "video/es/duck.mp4");
-  ess[1]= new Movie(this, "video/es/escape.mp4");
-  ess[2]= new Movie(this, "video/es/nuclear.mp4");
-  ess[3]= new Movie(this, "video/es/tsunami.mp4");
-  shakes[0]= new Movie(this, "video/shake/shake1.MOV");
-  shakes[1]= new Movie(this, "video/shake/shake2.MOV");
-  shakes[2]= new Movie(this, "video/shake/shake3.MOV");
-  shakes[3]= new Movie(this, "video/shake/shake4.MOV");
 
   //LOAD SAMPLE IMAGES
   face1 = loadImage("data/sample_assets/faces/smiley1.png");
@@ -728,12 +704,12 @@ void challenge3() {
     //Set an edge to the stage
     boundaryX = position.x / 25.4;
 
-    //Set the boundaries for the stage
+    //Set the boundaries for the seats
     if (distance < 175 && boundaryX > 4 && boundaryX < 20) {
       fill(0, 255, 0);
       textAlign(CENTER);
       textSize(60);
-      text(userId, position.x*3, position.y*2.5); //scaled
+     // text(userId, position.x*3, position.y*2.5); //scaled
 
       //Conditional to set the stateKinect 1 (con'e to the next stage) and create a random number if there are 3 users and stateKinect is 0
       if (userId == 3 && stateKinect == 0) {
@@ -750,6 +726,9 @@ void challenge3() {
   //if random person chosen is a first on Kinect list and stateKinect = 1 which is the next from previous stage
   if (rand == 0 && stateKinect == 1) {
     choosingPersonVote();
+  //  stroke(0, 255, 0);
+  //rectMode(CENTER);
+  //rect(position.x*3, position.y*2.5, 350, 800); //scaled
   } else if (rand == 1 && stateKinect == 1) { //<-- If random person chosen is  second on Kinect list
     choosingPersonVote();
   } else if (rand == 2 && stateKinect == 1) {//<-- If random person chosen is third on Kinect list of users
@@ -779,6 +758,9 @@ void challenge3() {
     textSize(60);
     //textAlign(CENTER);
     text("Your answer was: " + vote1, 720, 100);
+    if (silence==true){
+      figure.speak ("Your answer was: " + vote1 + ".  .  .  . ");
+  }
   }
 }
 
@@ -816,6 +798,9 @@ void choosingPersonVote()
   textSize(60);
   //textAlign(CENTER);
   text("Get ready to vote in: " + passedTime, 720, 100);
+  if (silence==true){
+      figure.speak ("get ready to vote .  .  .  . .  .  .  .  .  . ");
+  }
 }   
 
 //Function to vote
@@ -827,7 +812,12 @@ void votingRules()
   kinect.getCoM(userIdChosen, person1); 
   kinect.convertRealWorldToProjective(person1, person1); 
 
-  text(userIdChosen, person1.x*3, person1.y*2.5); // scaled
+  //text(userIdChosen, person1.x*3, person1.y*2.5); // scaled
+  //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
 
   if (totalTime == 0)
   {
@@ -860,8 +850,12 @@ void votingQ1()
   PVector person1 = new PVector();
   kinect.getCoM(userIdChosen, person1); 
   kinect.convertRealWorldToProjective(person1, person1);
-  text(userIdChosen, person1.x*3, person1.y*2.5); // Print out numbers on people
-
+  //text(userIdChosen, person1.x*3, person1.y*2.5); // Print out numbers on people
+  //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
 
   if (totalTime == 0)
   {
@@ -966,14 +960,22 @@ void choosingPersonJump()
   distance = person1.z / 25.4;
   boundaryX = person1.x / 25.4;
 
-  if (distance < 128 && boundaryX > 2 && boundaryX < 21.5 ) {
+  if (distance < 105 && boundaryX > 2 && boundaryX < 22 ) {
     stroke(0, 255, 255);
-    fill(0);
-    rect(person1.x, person1.y - 160, 350, 80);
+    //fill(0);
+    //rect(person1.x, person1.y - 160, 350, 80);
     fill(0, 255, 255);
-    textSize(30);
+    textSize(60);
     textAlign(CENTER);
     text("Welcome!", person1.x*3, person1.y*2.5 -160);
+    if (silence==true){
+      figure.speak ("welcome! .  .  . . . . ");
+  }
+    //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
     if (totalTime == 0)
     {
       totalTime=millis()/1000 + 4;
@@ -988,16 +990,24 @@ void choosingPersonJump()
     noFill();
     strokeWeight(4);
     stroke(0, 255, 0);
-    rectMode(CENTER);
-    rect(person1.x*3, person1.y*2.5, 100, 200);
+   // rectMode(CENTER);
+   // rect(person1.x*3, person1.y*2.5, 100, 200);
     println (rand + " " + stateKinect);
     stroke(0, 255, 255);
     fill(0);
-    rect(person1.x*3, person1.y*2.5 - 160, 350, 80);
+    //rect(person1.x*3, person1.y*2.5 - 160, 350, 80);
     fill(0, 255, 255);
-    textSize(30);
+    textSize(60);
     textAlign(CENTER);
     text("Come to the stage!\nQuick!", person1.x*3, person1.y*2.5 -160);
+    if (silence==true){
+      figure.speak ("come to the stage! stand on the x");
+  }
+    //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
   }
 }
 
@@ -1024,12 +1034,20 @@ void jumpingStart()
   }
   stroke(0, 255, 255);
   fill(0);
-  rect(width/2, height, 360, 240);
+  //rect(width/2, height, 360, 240);
   fill(0, 255, 255);
-  text(a, person1.x*3, person1.y*2.5);
-  textSize(28);
+  //text(a, person1.x*3, person1.y*2.5);
+  textSize(60);
   textAlign(CENTER);
-  text("Let's see how high you \ncan jump! Get ready!\n" + passedTime + "...", width/2, height-90);
+  text("Let's see how high you \ncan jump! Get ready!\n" + passedTime + "...", width/4, 200);
+  if (silence==true){
+      figure.speak ("get ready to jump! .   ");
+  }
+  //green rectangle
+  noFill();
+  stroke(0, 255, 0);
+  rectMode(CENTER);
+  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
 }
 void jump()
 {
@@ -1040,7 +1058,7 @@ void jump()
   distance = person1.z / 25.4;
   boundaryX = person1.x / 25.4;
   jumpY = person1.y/5.4;
-  text(b, person1.x*3, person1.y*2.5);
+  //text(b, person1.x*3, person1.y*2.5);
   
   if (totalTime == 0)
     {
@@ -1064,11 +1082,14 @@ void jump()
     
   stroke(0, 255, 255);
   fill(0);
-  rect(width/2, height, 360, 240);
+  //rect(width/2, height, 360, 240);
   fill(0, 255, 255);
-  textSize(28);
+  textSize(60);
   textAlign(CENTER);
-  text("JUMP!", width/2, height-90);
+  text("JUMP!", width/4, 500);
+  if (silence==true){
+      figure.speak ("jump! .  .  .");
+  }
   //Tell the participants to keep their arms down
   //Messes with the center of mass if they don't
 }
@@ -1081,4 +1102,10 @@ void postJump()
   println("B was: " + b);
   println("A was: " + a);
   println("lowest was: " + lowest);
+  textSize(60);
+  text("You jumped: " + int(c) + " inches!", width/4, 100);
+  if (silence==true){
+      figure.speak ("you jumped " + int(c) + "inches .  .  .  . .  .  .  .  .  . ");
+  }
+  
 }
