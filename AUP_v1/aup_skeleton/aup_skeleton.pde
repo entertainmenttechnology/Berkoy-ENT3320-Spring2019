@@ -118,6 +118,17 @@ String aqi_desc = "";
 String air_key= "KwYLLNsmAx4de4gaS";  //AB's key 
 String url = "http://api.airvisual.com/v2/city?city=New%20York&state=New%20York&country=USA&key=" + air_key;
 
+//VIDEOS
+Movie [] beats = new Movie [3];
+int whichBeats;
+int[] randomBeats= new int [beats.length];
+Movie [] ess = new Movie [4];
+int whichEss;
+int[] randomEss= new int [ess.length];
+Movie [] shakes = new Movie [4];
+int whichShakes;
+int[] randomShakes= new int [shakes.length];
+
 //SAMPLE ASSETS
 PImage face1, face2, face3;
 PImage back1, back2, back3, back4, back5;
@@ -168,6 +179,19 @@ void setup() {
   JSONObject nyc_air = loadJSONObject(url); //load the entire Object
   JSONObject pollution = nyc_air.getJSONObject("data").getJSONObject("current").getJSONObject("pollution"); //get object within objects
   aqi = pollution.getInt("aqius"); //here's the aqi!
+
+  //LOAD VIDEOS
+ beats[0]= new Movie(this, "video/beat/beat1.MOV");
+ beats[1]= new Movie(this, "video/beat/beat2.MOV");
+ beats[2]= new Movie(this, "video/beat/beat3.MOV");
+  ess[0]= new Movie(this, "video/es/duck.mp4");
+  ess[1]= new Movie(this, "video/es/escape.mp4");
+  ess[2]= new Movie(this, "video/es/nuclear.mp4");
+  ess[3]= new Movie(this, "video/es/tsunami.mp4");
+  shakes[0]= new Movie(this, "video/shake/shake1.MOV");
+  shakes[1]= new Movie(this, "video/shake/shake2.MOV");
+  shakes[2]= new Movie(this, "video/shake/shake3.MOV");
+  shakes[3]= new Movie(this, "video/shake/shake4.MOV");
 
   //LOAD SAMPLE IMAGES
   face1 = loadImage("data/sample_assets/faces/smiley1.png");
