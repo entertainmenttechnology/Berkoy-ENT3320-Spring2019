@@ -47,6 +47,11 @@ int display_width = display1_width + display2_width; //total width
 
 //VIDEO
 import processing.video.*;
+//setting up video arrays
+Movie [] beats = new Movie [3];
+Movie [] ess = new Movie [4];
+Movie [] shakes = new Movie [4];
+
 
 //SOUND STUFF
 import ddf.minim.*;
@@ -168,6 +173,19 @@ void setup() {
   JSONObject nyc_air = loadJSONObject(url); //load the entire Object
   JSONObject pollution = nyc_air.getJSONObject("data").getJSONObject("current").getJSONObject("pollution"); //get object within objects
   aqi = pollution.getInt("aqius"); //here's the aqi!
+
+  //LOAD VIDEOS
+  beats[0]= new Movie(this, "video/beat/beat1.mp4");
+  beats[1]= new Movie(this, "video/beat/beat2.mp4");
+  beats[2]= new Movie(this, "video/beat/beat3.mp4");
+  ess[0]= new Movie(this, "video/es/duck.mp4");
+  ess[1]= new Movie(this, "video/es/escape.mp4");
+  ess[2]= new Movie(this, "video/es/nuclear.mp4");
+  ess[3]= new Movie(this, "video/es/tsunami.mp4");
+  shakes[0]= new Movie(this, "video/shake/shake1.mp4");
+  shakes[1]= new Movie(this, "video/shake/shake2.mp4");
+  shakes[2]= new Movie(this, "video/shake/shake3.mp4");
+  shakes[3]= new Movie(this, "video/shake/shake4.mp4");
 
   //LOAD SAMPLE IMAGES
   face1 = loadImage("data/sample_assets/faces/smiley1.png");
@@ -304,30 +322,30 @@ void keyPressed() {
     joke();
   } else if (key== '7') {
     aqi_report();
-  } else if (key== '8'){
+  } else if (key== '8') {
     beat();
-  } else if (key== '9'){
+  } else if (key== '9') {
     shake();
-  } else if (key == '0'){
+  } else if (key == '0') {
     es();
   }
 
-//OTHER SHOW FUNCTIONS
-else if (key == 'p'){
-  preShow();
-} else if (key == 's'){
-  startShow();
-} else if (key == 'a'){
-  welcome();
-} else if (key == 'd'){
-  explain(1);
-} else if (key == 'g'){
-  explain(2);
-} else if (key == 'h'){
-  explain(3);
-} else if (key == 'j'){
-  finale();
-}
+  //OTHER SHOW FUNCTIONS
+  else if (key == 'p') {
+    preShow();
+  } else if (key == 's') {
+    startShow();
+  } else if (key == 'a') {
+    welcome();
+  } else if (key == 'd') {
+    explain(1);
+  } else if (key == 'g') {
+    explain(2);
+  } else if (key == 'h') {
+    explain(3);
+  } else if (key == 'j') {
+    finale();
+  }
 
   //SAMPLE IMAGES AND VIDEOS
   else if (key== 'q') {
@@ -440,68 +458,77 @@ void aqi_report() {
   figure.speak ("The current Air Quality Index for New York City is " + aqi + " . . . " + "This means that the air quality is . . ." + aqi_desc);
 }
 
-void beat(){
+void beat() {
   state= "beat";
-  if (silence==true){
-  figure.speak ("beat.");
-  }
+  //clearDisplay("display1", 0, 0, 0);
+  display1_video_visible= true;
+  display1_video.stop();
+  display1_video= beats[int(random(0, beats.length))];
+  display1_video.play();
 }
 
-void shake(){
-   state= "shake";
-  if (silence==true){
-  figure.speak ("shake.");
-  }
+void shake() {
+  state= "shake";
+  //clearDisplay("display1", 0, 0, 0);
+  display1_video_visible= true;
+  display1_video.stop();
+  display1_video= shakes[int(random(0, shakes.length))];
+  display1_video.play();
 }
 
-void es(){
-   state= "es";
-  if (silence==true){
-  figure.speak ("emergency simulation.");
-  }
+void es() {
+  state= "es";
+  //clearDisplay("display1", 0, 0, 0);
+  display1_video_visible= true;
+  display1_video.stop();
+  display1_video= ess[int(random(0, ess.length))];
+  display1_video.play();
 }
 
-void preShow (){
+void preShow () {
   state= "preShow";
-  if (silence==true){
-  figure.speak ("pre show.");
+  if (silence==true) {
+    figure.speak ("pre show.");
   }
 }
 
-void startShow(){
+void startShow() {
   state= "show";
-  if (silence==true){
-  figure.speak ("show.");
+  if (silence==true) {
+    figure.speak ("show.");
   }
 }
 
-void welcome(){
-   state= "welcome";
-  if (silence==true){
-  figure.speak ("welcome.");
+void welcome() {
+  state= "welcome";
+  if (silence==true) {
+    figure.speak ("welcome.");
   }
 }
 
-void explain(int i){
-  if (i==1){
-     state= "explain1";
-      if (silence==true){
+void explain(int i) {
+  if (i==1) {
+    state= "explain1";
+    if (silence==true) {
       figure.speak ("explain 1.");
-  }} else if (i==2){
+    }
+  } else if (i==2) {
     state= "explain2";
-      if (silence==true){
+    if (silence==true) {
       figure.speak ("explain 2.");
-  }} else if (i==3){
+    }
+  } else if (i==3) {
     state= "explain3";
-      if (silence==true){
+    if (silence==true) {
       figure.speak ("explain 3.");
-  }}
+    }
+  }
 }
 
-void finale(){
+void finale() {
   state= "finale";
-  if (silence==true){
-  figure.speak ("finale.");
+  if (silence==true) {
+    figure.speak ("finale.");
   }
 }
 
@@ -618,7 +645,7 @@ void challenge2() {
     distance = position.z / 25.4;
     boundaryX = position.x / 25.4;
 
-//Detecting the person distance
+    //Detecting the person distance
     if (distance < 175 && boundaryX > 0 && boundaryX < 24) {
       fill(0, 255, 0);
       textAlign(CENTER);
@@ -709,7 +736,7 @@ void challenge3() {
       fill(0, 255, 0);
       textAlign(CENTER);
       textSize(60);
-     // text(userId, position.x*3, position.y*2.5); //scaled
+      // text(userId, position.x*3, position.y*2.5); //scaled
 
       //Conditional to set the stateKinect 1 (con'e to the next stage) and create a random number if there are 3 users and stateKinect is 0
       if (userId == 3 && stateKinect == 0) {
@@ -719,16 +746,15 @@ void challenge3() {
         println(rand +" " + stateKinect);
       }
     }
-        println ("x: " + position.x/25.4 + " y: " + position.y/25.4);
-
+    println ("x: " + position.x/25.4 + " y: " + position.y/25.4);
   }
   //Conditional to choose different people
   //if random person chosen is a first on Kinect list and stateKinect = 1 which is the next from previous stage
   if (rand == 0 && stateKinect == 1) {
     choosingPersonVote();
-  //  stroke(0, 255, 0);
-  //rectMode(CENTER);
-  //rect(position.x*3, position.y*2.5, 350, 800); //scaled
+    //  stroke(0, 255, 0);
+    //rectMode(CENTER);
+    //rect(position.x*3, position.y*2.5, 350, 800); //scaled
   } else if (rand == 1 && stateKinect == 1) { //<-- If random person chosen is  second on Kinect list
     choosingPersonVote();
   } else if (rand == 2 && stateKinect == 1) {//<-- If random person chosen is third on Kinect list of users
@@ -758,9 +784,9 @@ void challenge3() {
     textSize(60);
     //textAlign(CENTER);
     text("Your answer was: " + vote1, 720, 100);
-    if (silence==true){
+    if (silence==true) {
       figure.speak ("Your answer was: " + vote1 + ".  .  .  . ");
-  }
+    }
   }
 }
 
@@ -798,8 +824,8 @@ void choosingPersonVote()
   textSize(60);
   //textAlign(CENTER);
   text("Get ready to vote in: " + passedTime, 720, 100);
-  if (silence==true){
-      figure.speak ("get ready to vote .  .  .  . .  .  .  .  .  . ");
+  if (silence==true) {
+    figure.speak ("get ready to vote .  .  .  . .  .  .  .  .  . ");
   }
 }   
 
@@ -865,7 +891,7 @@ void votingQ1()
   //Conditional to check if the person is standing or not
   if (passedTime <= 0) {
     //conditional if the person is within the boundaries of choosing area.
-      //println ("x: " + person1.x/25.4 + " y: " + person1.y/25.4);
+    //println ("x: " + person1.x/25.4 + " y: " + person1.y/25.4);
     if ((person1.x/25.4 >= 8) && (person1.x/25.4 < 18) && (person1.y/25.4 >= 9) && (person1.y/25.4 < 11)) 
     {
       vote1 = " NO!";
@@ -893,7 +919,7 @@ void challenge4() {
   state= "challenge4";
   kinect.update();
   background(0);
-  image(kinect.rgbImage(), 0, 0, 1920,1080); //scaled
+  image(kinect.rgbImage(), 0, 0, 1920, 1080); //scaled
 
   IntVector userList = new IntVector();
   kinect.getUsers(userList);
@@ -903,7 +929,7 @@ void challenge4() {
   noStroke();
   rect(RXJ, RYJ, RWJ, RHJ);
 
-//run for loop to locate person in front of camera
+  //run for loop to locate person in front of camera
   for (int i=0; i<userList.size() && stateKinect == 0; i++) { 
 
     //get an id for each person in the camera view.
@@ -922,7 +948,7 @@ void challenge4() {
       textSize(40);
       text(userId, position.x*3, position.y*2.5); // Print out numbers on people
 
-if (userId == 3 && stateKinect == 0) {
+      if (userId == 3 && stateKinect == 0) {
         delay(3000); //PROBLEM **********************
         rand = int(random(userId));
         stateKinect = 1;
@@ -968,14 +994,14 @@ void choosingPersonJump()
     textSize(60);
     textAlign(CENTER);
     text("Welcome!", person1.x*3, person1.y*2.5 -160);
-    if (silence==true){
+    if (silence==true) {
       figure.speak ("welcome! .  .  . . . . ");
-  }
+    }
     //green rectangle
-  noFill();
-  stroke(0, 255, 0);
-  rectMode(CENTER);
-  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
+    noFill();
+    stroke(0, 255, 0);
+    rectMode(CENTER);
+    rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
     if (totalTime == 0)
     {
       totalTime=millis()/1000 + 4;
@@ -990,8 +1016,8 @@ void choosingPersonJump()
     noFill();
     strokeWeight(4);
     stroke(0, 255, 0);
-   // rectMode(CENTER);
-   // rect(person1.x*3, person1.y*2.5, 100, 200);
+    // rectMode(CENTER);
+    // rect(person1.x*3, person1.y*2.5, 100, 200);
     println (rand + " " + stateKinect);
     stroke(0, 255, 255);
     fill(0);
@@ -1000,14 +1026,14 @@ void choosingPersonJump()
     textSize(60);
     textAlign(CENTER);
     text("Come to the stage!\nQuick!", person1.x*3, person1.y*2.5 -160);
-    if (silence==true){
+    if (silence==true) {
       figure.speak ("come to the stage! stand on the x");
-  }
+    }
     //green rectangle
-  noFill();
-  stroke(0, 255, 0);
-  rectMode(CENTER);
-  rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
+    noFill();
+    stroke(0, 255, 0);
+    rectMode(CENTER);
+    rect(person1.x*3, person1.y*2.5, 350, 800); //scaled
   }
 }
 
@@ -1040,8 +1066,8 @@ void jumpingStart()
   textSize(60);
   textAlign(CENTER);
   text("Let's see how high you \ncan jump! Get ready!\n" + passedTime + "...", width/4, 200);
-  if (silence==true){
-      figure.speak ("get ready to jump! .   ");
+  if (silence==true) {
+    figure.speak ("get ready to jump! .   ");
   }
   //green rectangle
   noFill();
@@ -1059,27 +1085,26 @@ void jump()
   boundaryX = person1.x / 25.4;
   jumpY = person1.y/5.4;
   //text(b, person1.x*3, person1.y*2.5);
-  
+
   if (totalTime == 0)
-    {
-      totalTime=millis()/1000 + 3;
+  {
+    totalTime=millis()/1000 + 3;
+  }
+  int passedTime = totalTime - int(millis()/1000);
+  if (passedTime <= 0) 
+  {
+    totalTime=0;
+    stateKinect = 4;
+  }
+
+  if (person1.y < a)
+  {
+    b = person1.y;
+    if (b<lowest) {
+      lowest = b;
     }
-    int passedTime = totalTime - int(millis()/1000);
-    if (passedTime <= 0) 
-    {
-      totalTime=0;
-      stateKinect = 4;
-    }
-    
-    if(person1.y < a)
-    {
-      b = person1.y;
-      if(b<lowest){
-        lowest = b;
-      }
-      
-    }
-    
+  }
+
   stroke(0, 255, 255);
   fill(0);
   //rect(width/2, height, 360, 240);
@@ -1087,8 +1112,8 @@ void jump()
   textSize(60);
   textAlign(CENTER);
   text("JUMP!", width/4, 500);
-  if (silence==true){
-      figure.speak ("jump! .  .  .");
+  if (silence==true) {
+    figure.speak ("jump! .  .  .");
   }
   //Tell the participants to keep their arms down
   //Messes with the center of mass if they don't
@@ -1104,8 +1129,7 @@ void postJump()
   println("lowest was: " + lowest);
   textSize(60);
   text("You jumped: " + int(c) + " inches!", width/4, 100);
-  if (silence==true){
-      figure.speak ("you jumped " + int(c) + "inches .  .  .  . .  .  .  .  .  . ");
+  if (silence==true) {
+    figure.speak ("you jumped " + int(c) + "inches .  .  .  . .  .  .  .  .  . ");
   }
-  
 }
