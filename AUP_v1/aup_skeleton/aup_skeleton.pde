@@ -134,6 +134,7 @@ String url = "http://api.airvisual.com/v2/city?city=New%20York&state=New%20York&
 //SAMPLE ASSETS
 PImage face1, face2, face3;
 PImage back1, back2, back3, back4, back5;
+PImage aqi_image;
 Movie video1;
 Movie video2;
 Movie video3;
@@ -195,6 +196,9 @@ void setup() {
   shakes[1]= new Movie(this, "video/shake/shake2.mp4");
   shakes[2]= new Movie(this, "video/shake/shake3.mp4");
   shakes[3]= new Movie(this, "video/shake/shake4.mp4");
+  
+  //LOAD IMAGES
+   aqi_image = loadImage("data/images/aqi.png");
 
   //LOAD SAMPLE IMAGES
   face1 = loadImage("data/sample_assets/faces/smiley1.png");
@@ -318,6 +322,7 @@ if (state== "show" && silence== true){
   } else if (state== "aqi" && silence == true){
     explain(2);
   } else if (state== "explain2" && silence == true){
+    display1_image_visible= false;
     shake(1);
   } else if (state== "shake1" && silence == true){
     if (display1_video.time() >= display1_video.duration()-1){
@@ -428,7 +433,7 @@ void keyPressed() {
     clearDisplay("display2", 255, 255, 255);
     display1_image_visible= true;
     display2_image_visible= true;
-    display1_image= back1;
+    display1_image= aqi_image;
     display2_image= face1;
   } else if (key== 'e') {
     clearDisplay("display1", 0, 0, 0);
@@ -518,10 +523,13 @@ void joke(int i) {
 //JSON DATA (AQI)
 void aqi_report() {
   state= "aqi";
+   clearDisplay("display1", 0, 0, 0);
+   display1_image_visible= true;
+   display1_image= aqi_image;
   if (aqi >= 0 && aqi <= 50) {
-    aqi_desc= "good. . . Air quality is satisfactory and poses little or no health risk. . . Ventilating your home is recommended. . . Recommendations. . . Enjoy your usual outdoor activities. We recommend opening your windows and ventilating your home to bring in fresh, oxygen-rich air.";
+    aqi_desc= "good. . . Air quality is satisfactory and poses little or no health risk. . . Ventilating your home is recommended. . . Here are some more recommendations. . . Enjoy your usual activities. . Open your windows and ventilate your home to bring in fresh, oxygen-rich air.";
   } else if (aqi >= 51 && aqi <= 100) {
-    aqi_desc= "moderate. . . Air quality is acceptable and poses little health risk. . . Sensitive groups may experience mild adverse effects and should limit prolonged outdoor exposure. . . Recommendations Enjoy your usual outdoor activities. . . We recommend opening your windows and ventilating your home to bring in fresh, oxygen-rich air.";
+    aqi_desc= "moderate. . . Air quality is acceptable and poses little health risk. . . Sensitive groups may experience mild adverse effects and should limit prolonged outdoor exposure. . . Here are some recommendations. . Enjoy your usual activities. . . Open your windows and ventilate your home to bring in fresh, oxygen-rich air.";
   } else if (aqi >= 101 && aqi <= 150) {
     aqi_desc= "Unhealthy for Sensitive Groups. . . Air quality poses increased likelihood of respiratory symptoms in sensitive individuals while the general public might only feel slight irritation. . . Both groups should reduce their outdoor activity. . . Recommendations The general public should greatly reduce outdoor exertion. . . Sensitive groups should avoid all outdoor activity. . . Everyone should take care to wear a pollution mask.. . Ventilation is discouraged. . . Air purifiers should be turned on.";
   } else if (aqi >= 151 && aqi <= 200) {
@@ -594,7 +602,7 @@ void welcome() {
   textSize(344);
   textAlign(CENTER,CENTER);
   text ("ARE YOU PREPARED?", 0, 0, 1920, 1080);
-  figure.speak ("Welcome. Thank you for joining me today. The purpose of this gathering is to test you. And also, to test, me. .  I am the first version of a prototype. . I may fail you at any moment. . Eventually, in a future version of myself, this will be a lecture on Emergency Simulation. But, right now, this is a simulation of a lecture on Emergency Simulation. . . . . What is Emergency Simulation?"); 
+  figure.speak ("Welcome. Thank you for joining me today. The purpose of this gathering is to test you. And also, to test, me. .  I am the first version of a prototype. . I may fail you at any moment. . Eventually, in a future version of myself, this will be a lecture on Emergency Simulation. But, right now, this is a simulation of a lecture on Emergency Simulation. . . What is Emergency Simulation?"); 
 }
 
 void explain(int i) {
