@@ -2,8 +2,7 @@
 ////////////////////////////////////////////////////////
  AUP SKELETON
  
- PRESS KEY 'p' for preShow()
- PRESS KEY 's' for startShow()
+ ****PRESS KEY 's' for startShow()****
  
  TESTING:
  Press keys to test (see below).
@@ -113,15 +112,15 @@ boolean displayFace= false;
 
 //JOKE STUFF
 String [] joke= {
-  "Here we go. .  Why do ambulances require two drivers at all times? . . .  Because they’re a pair o' medics!", 
-  "Here we go. .  Did you hear about the guy whose entire left side was cut off? . . .  Do not worry. He is all right now!", 
-  "Here we go. .  How do Hurricanes See? . . .  With one eye!", 
-  "Here we go. .  What’s the difference between Weather and Climate? . . .  You can’t weather a tree, but you can climate.", 
-  "Here we go. .  What do cows make during a hurricane?. . .  Milk shakes!", 
-  "Here we go. .  Did you hear the joke about amnesia?. . .  I forgot how it goes! Hahaha!", 
-  "Here we go. .  How do you gift wrap a cloud?. . .  With a rainbow!", 
-  "Here we go. .  What did the Tsunami say to the island?. . .  Nothing. It just waved!", 
-  "Here we go. .  Why did the tornado finally take a break?. . .  It was winded!"
+  ". . Obviously, it is time for a joke. . . Why do ambulances require two drivers at all times? . . .  Because they’re a pair o' medics! . . ", 
+  ". . Obviously, it is time for a joke. . .  Did you hear about the guy whose entire left side was cut off? . . .  Do not worry. He is all right now! . . ", 
+  ". . Obviously, it is time for a joke. . .  How do Hurricanes See? . . .  With one eye! . . ", 
+  ". . Obviously, it is time for a joke. . .  What’s the difference between Weather and Climate? . . .  You can’t weather a tree, but you can climate. . . ", 
+  ". . Obviously, it is time for a joke. . .  What do cows make during a hurricane?. . .  Milk shakes! . . ", 
+  ". . Obviously, it is time for a joke. . .  Did you hear the joke about amnesia?. . .  I forgot how it goes! Hahaha! . . ", 
+  ". . Obviously, it is time for a joke. . .  How do you gift wrap a cloud?. . .  With a rainbow! . . ", 
+  ". . Obviously, it is time for a joke. . .  What did the Tsunami say to the island?. . .  Nothing. It just waved! . . ", 
+  ". . Obviously, it is time for a joke. . .  Why did the tornado finally take a break?. . .  It was winded! . . "
 };
 int whichJoke;
 int[] randomJoke= new int [joke.length];
@@ -153,7 +152,6 @@ boolean display2_image_visible=false;
 boolean display1_video_visible=false;
 boolean display2_video_visible=false;
 AudioPlayer sound; //object for current sound loaded
-
 
 //MORE VARIABLES
 String text, state;
@@ -305,14 +303,14 @@ void draw() {
   //PROGRAM FLOW
   
 
-  if (state== "show" && silence== true){
+if (state== "show" && silence== true){
     beat();
   } else if (state== "beat" && display1_video.time() >= display1_video.duration()-1){
     welcome();
   } else if (state== "welcome" && silence == true){
     es();
   } else if (state== "es" && display1_video.time() >= display1_video.duration()-1){
-    joke();
+    joke(1);
   } else if (state== "joke" && silence == true){
     explain(1);
   } else if (state== "explain1" && silence == true){
@@ -342,7 +340,12 @@ void draw() {
     }
   } else if (challenge==4 && state== "postJump" && silence == true){
     finale();
-  }
+  } else if (state== "finale" && silence == true){
+    joke(2);
+  } else if (state== "joke2" && silence == true){
+    clearDisplay("display1", 0,0,0);
+    clearDisplay("display2", 0,0,0);
+  } 
   
   //KINECT
   if (challenge==1) {
@@ -387,7 +390,7 @@ void keyPressed() {
   else if (key=='5') {
     figure.speak("Hello, this is a text to speech demo. We are testing voices for legibility. How clearly can you understand me?");
   } else if (key== '6') {
-    joke();
+    joke(1);
   } else if (key== '7') {
     aqi_report();
   } else if (key== '8') {
@@ -498,9 +501,15 @@ void clearDisplay(String whichDisplay, int r, int g, int b) {
 }
 
 //JOKE
-void joke() {
+void joke(int i) {
+  if (i== 1){
   state= "joke";
-  handle(joke, "joke", whichJoke, randomJoke);
+  clearDisplay("display1", 0,0,0);
+  handle(joke, "joke", whichJoke, randomJoke);}
+  else if (i==2){
+    state= "joke2";
+    handle(joke, "joke2", whichJoke, randomJoke);
+  }
   whichJoke= currentInput;
   figure3.speak(text);
   println(text);
@@ -556,40 +565,49 @@ void es() {
   display1_image_visible= false;
   display1_video_visible= true;
   display1_video.stop();
-  display1_video= ess[int(random(0, ess.length))];
+  //display1_video= ess[int(random(0, ess.length))];
+  display1_video= ess[0];
   display1_video.play();
 }
 
 void preShow () {
   state= "preShow";
   if (silence==true) {
-    figure.speak ("pre show.");
+    figure.speak ("pre show. placeholder. hello. hello.");
   }
 }
 
 void startShow() {
   state= "show";
+  clearDisplay("display1", 0, 0, 0);
+  clearDisplay("display2", 0, 0, 0);
+  displayFace=true;
   if (silence==true) {
-    figure.speak ("show. blah blah blah placeholder for show.");
+    figure.speak ("I am ready. . . Let's get some introductory music.");
   } 
 }
 
 void welcome() {
-  state= "welcome"; {
-    figure.speak ("welcome. hi. hi. placeholder.");
-  }
+  state= "welcome";
+  clearDisplay("display1", 0, 0, 0);
+  fill(255);
+  textSize(344);
+  textAlign(CENTER,CENTER);
+  text ("ARE YOU PREPARED?", 0, 0, 1920, 1080);
+  figure.speak ("Welcome. Thank you for joining me today. The purpose of this gathering is to test you. And also, to test, me. .  I am the first version of a prototype. . I may fail you at any moment. . Eventually, in a future version of myself, this will be a lecture on Emergency Simulation. But, right now, this is a simulation of a lecture on Emergency Simulation. . . . . What is Emergency Simulation?"); 
 }
 
 void explain(int i) {
   if (i==1) {
     state= "explain1";
-      figure.speak ("explain 1. this is an explanation.");
+      figure.speak ("Ha. Ha. . . I hope it is not too jarring when I change my voice. . I am trying to show off. . And now, I will show off even more. . Do you know the current level of air pollution in New York City? . .  I do. . . I will pull this data from a local air monitoring station right now for you.");
     } else if (i==2) {
     state= "explain2";
-     figure.speak ("explain 2. this is an explanation.");
+     clearDisplay("display1", 0,0,0);
+     figure.speak ("And now we move on to the most exciting part of the show. . Unless it fails. . . But failure can also be exciting . . . This next part is called Stand Up for What you Believe in. . . But first, I must ask you to do something. . I want to see you, but I do not see very well. .  Can you please move your bodies while staying at your seats? . . If you are too still, I might mistake you for a chair. . Or a ghost. . Ready? . .");
   } else if (i==3) {
     state= "explain3";
-      figure.speak ("explain 3. this is an explanation.");
+      figure.speak ("Thank you for taking part in that test of Stand up for What you Believe in. . Now, I have another exciting test for you. . . This one is called, How hi can you jump?  . .  But first, you know what to do.");
   }else if (i==4) {
     state= "explain4";
       figure.speak ("explain 4. this is an explanation.");
@@ -600,7 +618,7 @@ void explain(int i) {
 void finale() {
   state= "finale";
   if (silence==true) {
-    figure.speak ("finale.");
+    figure.speak ("And now. . We have reached the end of this test. . Thank you for your time. . Some day this will be a very grand finale, but for now");
   }
 }
 
@@ -981,7 +999,7 @@ void votingQ1()
   fill(255, 0, 0);
   textSize(60);
   //textAlign(CENTER);
-  text("Do you believe in strong \nsafety precautions in the \nworkplace? " + passedTime, 720, 100);
+  text("Do you believe that your vote will count? " + passedTime, 720, 100);
 }
 
 ////////////////////////////////////////////////////
