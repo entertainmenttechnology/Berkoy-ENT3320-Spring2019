@@ -259,6 +259,7 @@ void draw() {
 /*
   //KINECT
   if (challenge==1) {
+    display1_video_visible= false;
     challenge1();
   } else if (challenge==2) {
     challenge2();
@@ -312,8 +313,28 @@ void draw() {
     explain(2);
   } else if (state== "explain2" && silence == true){
     shake();
+  } else if (state== "shake" && silence == true){
+    if (display1_video.time() >= display1_video.duration()-1){
+      display1_video_visible= false;
+      challenge=1;
+    } else {
+      figure.speak ("stand up. shake it out. shake it. sit down.");
+  } 
   }
-    println("state: " + state + " time: " + display1_video.time() + "dur: " + display1_video.duration());
+  
+  //KINECT
+  if (challenge==1) {
+    challenge1();
+  } else if (challenge==2) {
+    challenge2();
+  } else if (challenge==3) {
+    challenge3();
+  } else if (challenge==4) {
+    challenge4();
+ 
+   println("state: " + state);
+  //println("video time: " + display1_video.time() + "dur: " + display1_video.duration());
+}
 }
 
 
