@@ -312,14 +312,28 @@ void draw() {
   } else if (state== "aqi" && silence == true){
     explain(2);
   } else if (state== "explain2" && silence == true){
-    shake();
-  } else if (state== "shake" && silence == true){
+    shake(1);
+  } else if (state== "shake1" && silence == true){
     if (display1_video.time() >= display1_video.duration()-1){
       display1_video_visible= false;
-      challenge=1;
+      challenge=3;
     } else {
       figure.speak ("stand up. shake it out. shake it. sit down.");
-  } 
+  } } else if (challenge==3 && state== "voteAnswer" && silence == true){
+    challenge=0;
+    stateKinect=0;
+    explain(3);
+  } else if (state== "explain3" && silence == true){
+    shake(2);
+  } else if (state== "shake2" && silence == true){
+    if (display1_video.time() >= display1_video.duration()-1){
+      display1_video_visible= false;
+      challenge=4;
+    } else {
+      figure.speak ("time to stand up. shake it out. shake. sit down.");
+    }
+  } else if (challenge==4 && state== "postJump" && silence == true){
+    finale();
   }
   
   //KINECT
@@ -331,12 +345,11 @@ void draw() {
     challenge3();
   } else if (challenge==4) {
     challenge4();
- 
-   println("state: " + state);
+  }
+  
+ println("state: " + state);
   //println("video time: " + display1_video.time() + "dur: " + display1_video.duration());
 }
-}
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -372,7 +385,7 @@ void keyPressed() {
   } else if (key== '8') {
     beat();
   } else if (key== '9') {
-    shake();
+    shake(1);
   } else if (key == '0') {
     es();
   }
@@ -515,8 +528,12 @@ void beat() {
   display1_video.play();
 }
 
-void shake() {
-  state= "shake";
+void shake(int i) {
+  if (i== 1){
+    state= "shake1";
+  } else if (i==2){
+    state= "shake2";
+  }
   //clearDisplay("display1", 0, 0, 0);
   display1_image_visible= false;
   display1_video_visible= true;
@@ -817,7 +834,7 @@ void challenge3() {
 
   if (stateKinect == 4) //<-- After the answer was recorded go to stage 4 and show the answer
   {
-
+    state= "voteAnswer";
     int userIdChosen = rand + 1;
     PVector person1 = new PVector();
     kinect.getCoM(userIdChosen, person1); 
@@ -834,7 +851,7 @@ void challenge3() {
     if (silence==true) {
       figure.speak ("Your answer was: " + vote1 + ".  .  .  . ");
     }
-  }
+  } 
 }
 
 //Function to choose a person for Challenge 3
@@ -1168,6 +1185,7 @@ void jump()
 
 void postJump()
 {
+  state= "postJump";
   c = a - lowest;
   c = c / 5.4;
   println("jump height is:  " + c);
