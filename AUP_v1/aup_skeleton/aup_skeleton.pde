@@ -63,8 +63,14 @@ Minim minim; //Minim object
 //TTS 
 import java.util.*;
 Figure figure;  //creates new object from Figure class
+Figure figure2;
+Figure figure3;
 String voice= "Rhona"; //keep voice as "fred" if no other voices installed
 int voiceSpeed= 175;
+String voice2= "Harry"; 
+int voiceSpeed2= 200;
+String voice3= "BadGuy"; 
+int voiceSpeed3= 200;
 boolean silence= true; 
 
 
@@ -165,6 +171,8 @@ void setup() {
 
   //TTS
   figure = new Figure(voice, voiceSpeed); //input installed voice name and speed
+  figure2 = new Figure(voice2, voiceSpeed2);
+  figure3 = new Figure(voice3, voiceSpeed3);
 
   //FACE
   face= new Face();
@@ -250,7 +258,7 @@ void draw() {
    */
 
   //TTS
-  if (figure.isSpeaking()) {
+  if (figure.isSpeaking() || figure2.isSpeaking() || figure3.isSpeaking()) {
     silence= false;
   } else {
     silence=true;
@@ -494,7 +502,7 @@ void joke() {
   state= "joke";
   handle(joke, "joke", whichJoke, randomJoke);
   whichJoke= currentInput;
-  figure.speak(text);
+  figure3.speak(text);
   println(text);
 }
 
