@@ -2,6 +2,9 @@
 ////////////////////////////////////////////////////////
  AUP SKELETON
  
+ PRESS KEY 'p' for preShow()
+ PRESS KEY 's' for startShow()
+ 
  TESTING:
  Press keys to test (see below).
  'q' for blue-monitor + red-projector callibration.
@@ -253,6 +256,7 @@ void draw() {
     silence=true;
   }
 
+/*
   //KINECT
   if (challenge==1) {
     challenge1();
@@ -262,7 +266,7 @@ void draw() {
     challenge3();
   } else if (challenge==4) {
     challenge4();
-  }
+  }*/
 
 
   //DISPLAY STUFF
@@ -286,8 +290,18 @@ void draw() {
     }
     image (display2_video, display1_width, 0);
   }
-  println(state);
+
   //KINECT NOTE: SEE DISPLAY IN KINECT CHALLENGES;
+  
+  //PROGRAM FLOW
+  
+
+  if (state== "show" && silence== true){
+    beat();
+  }
+  
+  
+    println(state);
 }
 
 
@@ -331,9 +345,9 @@ void keyPressed() {
   }
 
   //OTHER SHOW FUNCTIONS
-  else if (key == 'p') {
+  else if (key == 'p') { //**********START HERE
     preShow();
-  } else if (key == 's') {
+  } else if (key == 's') { //*******THEN HERE
     startShow();
   } else if (key == 'a') {
     welcome();
@@ -495,8 +509,8 @@ void preShow () {
 void startShow() {
   state= "show";
   if (silence==true) {
-    figure.speak ("show.");
-  }
+    figure.speak ("show. blah blah blah placeholder for show.");
+  } 
 }
 
 void welcome() {
@@ -522,8 +536,14 @@ void explain(int i) {
     if (silence==true) {
       figure.speak ("explain 3.");
     }
+  }else if (i==4) {
+    state= "explain4";
+    if (silence==true) {
+      figure.speak ("explain 4.");
+    }
   }
 }
+
 
 void finale() {
   state= "finale";
