@@ -298,10 +298,22 @@ void draw() {
 
   if (state== "show" && silence== true){
     beat();
+  } else if (state== "beat" && display1_video.time() >= display1_video.duration()-1){
+    welcome();
+  } else if (state== "welcome" && silence == true){
+    es();
+  } else if (state== "es" && display1_video.time() >= display1_video.duration()-1){
+    joke();
+  } else if (state== "joke" && silence == true){
+    explain(1);
+  } else if (state== "explain1" && silence == true){
+    aqi_report();
+  } else if (state== "aqi" && silence == true){
+    explain(2);
+  } else if (state== "explain2" && silence == true){
+    shake();
   }
-  
-  
-    println(state);
+    println("state: " + state + " time: " + display1_video.time() + "dur: " + display1_video.duration());
 }
 
 
@@ -475,6 +487,7 @@ void aqi_report() {
 void beat() {
   state= "beat";
   //clearDisplay("display1", 0, 0, 0);
+  display1_image_visible= false;
   display1_video_visible= true;
   display1_video.stop();
   display1_video= beats[int(random(0, beats.length))];
@@ -484,6 +497,7 @@ void beat() {
 void shake() {
   state= "shake";
   //clearDisplay("display1", 0, 0, 0);
+  display1_image_visible= false;
   display1_video_visible= true;
   display1_video.stop();
   display1_video= shakes[int(random(0, shakes.length))];
@@ -493,6 +507,7 @@ void shake() {
 void es() {
   state= "es";
   //clearDisplay("display1", 0, 0, 0);
+  display1_image_visible= false;
   display1_video_visible= true;
   display1_video.stop();
   display1_video= ess[int(random(0, ess.length))];
@@ -514,33 +529,24 @@ void startShow() {
 }
 
 void welcome() {
-  state= "welcome";
-  if (silence==true) {
-    figure.speak ("welcome.");
+  state= "welcome"; {
+    figure.speak ("welcome. hi. hi. placeholder.");
   }
 }
 
 void explain(int i) {
   if (i==1) {
     state= "explain1";
-    if (silence==true) {
-      figure.speak ("explain 1.");
-    }
-  } else if (i==2) {
+      figure.speak ("explain 1. this is an explanation.");
+    } else if (i==2) {
     state= "explain2";
-    if (silence==true) {
-      figure.speak ("explain 2.");
-    }
+     figure.speak ("explain 2. this is an explanation.");
   } else if (i==3) {
     state= "explain3";
-    if (silence==true) {
-      figure.speak ("explain 3.");
-    }
+      figure.speak ("explain 3. this is an explanation.");
   }else if (i==4) {
     state= "explain4";
-    if (silence==true) {
-      figure.speak ("explain 4.");
-    }
+      figure.speak ("explain 4. this is an explanation.");
   }
 }
 
