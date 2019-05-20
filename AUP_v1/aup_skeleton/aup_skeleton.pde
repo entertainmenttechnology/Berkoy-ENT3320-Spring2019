@@ -329,7 +329,7 @@ if (state== "show" && silence== true){
       display1_video_visible= false;
       challenge=3;
     } else {
-      figure.speak ("stand up. shake it out. shake it. sit down.");
+      figure.speak ("stand up. shake it out. shake it.");
   } } else if (challenge==3 && state== "voteAnswer" && silence == true){
     challenge=0;
     stateKinect=0;
@@ -341,13 +341,15 @@ if (state== "show" && silence== true){
       display1_video_visible= false;
       challenge=4;
     } else {
-      figure.speak ("time to stand up. shake it out. shake. sit down.");
+      figure.speak ("time to stand up. shake it out. shake.");
     }
   } else if (challenge==4 && state== "postJump" && silence == true){
+    challenge=0;
     finale();
   } else if (state== "finale" && silence == true){
     joke(2);
   } else if (state== "joke2" && silence == true){
+    rectMode(CORNER);
     clearDisplay("display1", 0,0,0);
     clearDisplay("display2", 0,0,0);
   } 
@@ -625,6 +627,7 @@ void explain(int i) {
 
 void finale() {
   state= "finale";
+  challenge= 0;
   if (silence==true) {
     figure.speak ("And now. . We have reached the end of this test. . Thank you for your time. . Some day this will be a very grand finale, but for now");
   }
@@ -1219,7 +1222,7 @@ void jump()
 
 void postJump()
 {
-  state= "postJump";
+  state= "postJump"; 
   c = a - lowest;
   c = c / 5.4;
   println("jump height is:  " + c);
@@ -1229,6 +1232,6 @@ void postJump()
   textSize(60);
   text("You jumped: " + int(c) + " inches!", width/4, 100);
   if (silence==true) {
-    figure.speak ("you jumped " + int(c) + "inches .  .  .  . .  .  .  .  .  . ");
-  }
+    figure.speak ("you jumped " + int(c) + "inches .  .  .  . .  .  .  .  .  . ");   
+ }  
 }
